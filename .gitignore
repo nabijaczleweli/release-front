@@ -3,10 +3,11 @@
 !ext/**
 !src
 !src/**
+!assets
+!assets/**
 !.git*
 !*.yml
 !*Makefile
-!index.*
 !*.sublime-project
 !.clang-format
 !LICENSE

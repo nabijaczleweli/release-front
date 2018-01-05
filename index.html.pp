@@ -1,1 +1,0 @@
-<span>%%RELEASE_FRONT_VERSION_STR%%</span>

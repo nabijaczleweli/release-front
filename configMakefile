@@ -24,6 +24,9 @@
 # RELEASE_FRONT_VERSION_STR := $(shell git describe)
 RELEASE_FRONT_VERSION_STR := $(shell git log -1 --pretty=format:%h | grep -v gpg)
 
+AWK := awk
+SED := sed
+CPP := cpp
 BABEL := babel
 MINIFYJS := minifyjs
 BABELAR := --no-comments --presets=env --modules umd --source-maps inline
@@ -31,6 +34,5 @@ MINIFYJSAR := --minify --level 2
 
 OUTDIR := out/
 BLDDIR := out/build/
-JSDIR := $(OUTDIR)js/
 SRCDIR := src/
 ASSETDIR := assets/

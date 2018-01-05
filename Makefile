@@ -23,33 +23,46 @@
 include configMakefile
 
 
-SOURCES := $(sort $(wildcard src/*.js src/**/*.js src/**/**/*.js src/**/**/**/*.js))
+# Args: $<, $@, additional defines
+# `cpp` doesn't like Unicode paths so we do some fuckery for it to not choke thereon
+preprocess_file = cd $(dir $(1)) && $(CPP) $(notdir $(1)) -CC -P -DDATE_TIME="$(shell date "+%d.%m.%Y %H:%M:%S %Z")" -DFILE_NAME="$(1)" -DFILE_NAME_STUB="$(patsubst src/%/,%,$(dir $(1)))" $(DEFAULT_DEFINES) $(ADDITIONAL_TRAVIS_ARGS) $(3) | $(SED) -re "s;COLON_SLASH_SLASH;://;g" -e "s/<!--([[:space:]'\"]*<!--[[:space:]'\"]*)*-->//g" -e "s/FORCED_NEWLINE/\\n/g" -e "s;SLASH_ASTERIX;/*;g" -e "s;/\\*([[:space:]]*(/\\*)*[[:space:]]*)*\\*/;;g" -e "s/​FORCED_SPACER​//g" -e "s/HASH/\#/g" -e "s/[[:space:]]+^/\\n/g" > $(CURDIR)/$(2)
 
-.PHONY : all clean js index license
 
-all : js index license
+DEFAULT_DEFINES := $(foreach l,RELEASE_FRONT_VERSION_STR,-D$(l)=$($(l)))
+ASSETS := $(sort $(wildcard assets/*.* assets/**/*.* assets/**/**/*.* assets/**/**/**/*.*))
+JAVASCRIPT_SOURCES := $(sort $(wildcard src/*.js src/**/*.js src/**/**/*.js src/**/**/**/*.js))
+PREPROCESSOR_SOURCES := $(sort $(wildcard src/*.pp src/**/*.pp src/**/**/*.pp src/**/**/**/*.pp))
+
+.PHONY : all clean assets js preprocess license
+
+all : assets js preprocess license
 
 clean :
 	rm -rf $(OUTDIR)
 
-js : $(foreach l,$(subst src/,$(JSDIR),$(SOURCES)),$(l) $(subst .js,.min.js,$(l)))
-index : $(OUTDIR)index.html
+assets : $(foreach l,$(subst $(ASSETDIR),$(OUTDIR),$(ASSETS)),$(l))
+js : $(foreach l,$(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$(l) $(subst .js,.min.js,$(l)))
+preprocess : $(patsubst src/%.pp,$(OUTDIR)%,$(PREPROCESSOR_SOURCES))
 license : $(OUTDIR)LICENSE
 
-
-$(OUTDIR)index.html : index.html.pp
-	@mkdir -p $(dir $@)
-	sed $^ -r $(foreach l,RELEASE_FRONT_VERSION_STR,-e 's/%%$(l)%%/$($(l))/g') > $@
 
 $(OUTDIR)LICENSE : LICENSE
 	@mkdir -p $(dir $@)
 	cp $^ $@
 
 
-$(JSDIR)%.js : $(SRCDIR)%.js
+$(OUTDIR)%.js : $(SRCDIR)%.js
 	@mkdir -p $(dir $@)
 	$(BABEL) $(BABELAR) $^ --out-file $@
 
-$(JSDIR)%.min.js : $(JSDIR)%.js
+$(OUTDIR)%.min.js : $(OUTDIR)%.js
 	@mkdir -p $(dir $@)
 	$(MINIFYJS) $(MINIFYJSAR) -i $^ -o $@
+
+$(OUTDIR)% : src/%.pp
+	@mkdir -p $(dir $@)
+	$(call preprocess_file,$<,$@,)
+
+$(OUTDIR)% : assets/%
+	@mkdir -p $(dir $@)
+	cp $^ $@

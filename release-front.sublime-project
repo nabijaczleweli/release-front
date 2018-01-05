@@ -19,6 +19,10 @@
 			"path": "src",
 		},
 		{
+			"name": "Assets",
+			"path": "assets",
+		},
+		{
 			"file_include_patterns":
 			[
 				"*Makefile*",
