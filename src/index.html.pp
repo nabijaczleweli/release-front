@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<link rel="shortcut icon" href="/assets/favicons/favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
 
 		<link href="css/common.css" rel="stylesheet" />
 		<link href="css/search.css" rel="stylesheet" />
@@ -20,7 +20,6 @@
 
 <div id="search">
 	<h1 class="smallcaps">release-front</h1>
-	<!-- -- TODO: button under, JS to reload w/ new URL -- -->
 	<input id="search-input" placeholder="Repository slug/URL" type="text" spellcheck="false" />
 	<div class="link-box-small">
 		<a id="search-button" class="search link-button">
