@@ -11,7 +11,7 @@
 !*.sublime-project
 !.clang-format
 !.babelrc
-!LICENSE
+!LICENSE*
 !gh_rsa.enc
 !README.md
 !pictura-mediocritas.rc

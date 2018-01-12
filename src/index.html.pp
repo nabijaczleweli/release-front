@@ -6,21 +6,25 @@
 
 		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
 
+		<link href="//nabijaczleweli.xyz/content/writing/the_taste_of_mi/Merriweather-font.css" rel="stylesheet" />
+		<link href="//nabijaczleweli.xyz/content/writing/Roboto-font.css" rel="stylesheet" />
+		<link href="css/DejaVu-Sans-Mono.css" rel="stylesheet" />
+
 		<link href="css/common.css" rel="stylesheet" />
 		<link href="css/search.css" rel="stylesheet" />
 		<link href="css/footer.css" rel="stylesheet" />
 
-		<script type="text/javascript" src="js/url.js"></script>
-		<script type="text/javascript" src="js/search.js"></script>
+		<script type="text/javascript" src="js/url.min.js"></script>
+		<script type="text/javascript" src="js/search.min.js"></script>
 
 		<title>release-front</title>
 	</head>
 
-	<body>
+	<body class="roboto">
 
 <div id="search">
-	<h1 class="smallcaps">release-front</h1>
-	<input id="search-input" placeholder="Repository slug/URL" type="text" spellcheck="false" />
+	<h1 class="smallcaps merriweather">release-front</h1>
+	<input id="search-input" class="roboto-em" placeholder="Repository slug/URL" type="text" spellcheck="false" />
 	<div class="link-box-small">
 		<a id="search-button" class="search link-button">
 			Get release
