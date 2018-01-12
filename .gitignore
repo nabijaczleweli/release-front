@@ -10,6 +10,7 @@
 !*Makefile
 !*.sublime-project
 !.clang-format
+!.babelrc
 !LICENSE
 !gh_rsa.enc
 !README.md

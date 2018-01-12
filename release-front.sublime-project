@@ -27,6 +27,7 @@
 			[
 				"*Makefile*",
 				"*.yml",
+				".babelrc",
 			],
 			"folder_exclude_patterns":
 			[

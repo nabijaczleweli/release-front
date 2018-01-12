@@ -22,14 +22,14 @@
 
 # TODO: uncomment when there's a first tag
 # RELEASE_FRONT_VERSION_STR := $(shell git describe)
-RELEASE_FRONT_VERSION_STR := $(shell git log -1 --pretty=format:%h | grep -v gpg)
+RELEASE_FRONT_VERSION_STR := v0.0.0-$(shell git rev-list --count HEAD)-$(shell git log -1 --pretty=format:%h | grep -v gpg)
 
 AWK := awk
 SED := sed
 CPP := cpp
 BABEL := babel
 MINIFYJS := minifyjs
-BABELAR := --no-comments --presets=env --modules umd --source-maps inline
+BABELAR := --no-comments --source-maps inline
 MINIFYJSAR := --minify --level 2
 
 OUTDIR := out/
