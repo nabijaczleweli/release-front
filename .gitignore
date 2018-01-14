@@ -1,0 +1,16 @@
+*
+!ext
+!ext/**
+!src
+!src/**
+!.git*
+!*.yml
+!*Makefile
+!index.*
+!*.sublime-project
+!.clang-format
+!LICENSE
+!gh_rsa.enc
+!README.md
+!pictura-mediocritas.rc
+!pictura-mediocritas.md

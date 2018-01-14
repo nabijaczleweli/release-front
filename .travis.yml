@@ -1,0 +1,63 @@
+language: node_js
+node_js:
+  - node
+sudo: false
+cache: yarn
+git:
+  submodules: false
+
+env:
+  global:
+    - DEPLOY=true
+    - DEPLOY_FILE="$TRAVIS_BUILD_DIR/../release-front-$TRAVIS_TAG.tbz2"
+
+before_install:
+  - if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
+      openssl aes-256-cbc -K $encrypted_0e7677705f90_key -iv $encrypted_0e7677705f90_iv -in gh_rsa.enc -out gh_rsa -d;
+    fi
+
+install:
+  - yarn add minifyjs babel-cli babel-preset-env
+  - git submodule update --init --recursive
+
+script:
+  - make
+
+after_success:
+  - if [ "$TRAVIS_SECURE_ENV_VARS" == "true" ]; then
+      (
+        echo "Update release for commits $TRAVIS_COMMIT_RANGE";
+        echo;
+        git log $TRAVIS_COMMIT_RANGE --pretty=oneline;
+      ) >> $TRAVIS_BUILD_DIR/../RELEASE_UPDATE_MSG;
+      mkdir -p ~/.ssh && cp gh_rsa ~/.ssh/id_rsa && chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa;
+      git clone -b gh-pages "git@github.com:$TRAVIS_REPO_SLUG.git" "$TRAVIS_BUILD_DIR-gh-pages";
+      cp -f out/* "$TRAVIS_BUILD_DIR-gh-pages";
+      rm -rf "$TRAVIS_BUILD_DIR-gh-pages/build/";
+      pushd "$TRAVIS_BUILD_DIR-gh-pages";
+      git config --global user.email "nabijaczleweli@gmail.com";
+      git config --global user.name "Nabijaczleweli Autouploader Bot";
+      git config --global push.default simple;
+      git add *;
+      git commit -F "$TRAVIS_BUILD_DIR/../RELEASE_UPDATE_MSG";
+      git push;
+      popd;
+    fi
+  - if [ "$TRAVIS_TAG" ]; then
+      cp -r out "$TRAVIS_BUILD_DIR/../release-front-$TRAVIS_TAG";
+      pushd "$TRAVIS_BUILD_DIR/..";
+      rm -rf "release-front-$TRAVIS_TAG/build";
+      tar -caf "release-front-$TRAVIS_TAG.tbz2" "release-front-$TRAVIS_TAG";
+      rm -rf "release-front-$TRAVIS_TAG";
+      popd;
+    fi
+
+deploy:
+  provider: releases
+  api-key:
+    secure: l6Yx5e+Q6o+xxxjYALB2tY/8z5d02o+VAvx1dawEFfUd+FLnRh2IQHvjbJLCr2jqwVtCVeD/RD+D3S02d9LonNl5Og2ueStCzH9JcF5ApsWIW+IlnTnRfL7TfaH/RtoTlmYcsjwon0oe3laM/+B/YuWijtxEv4Nasmk6Nxo453b3wpu8+Xh8SwVfrbvV82niibj/DbCen+ikLn8Z2ZmuOmo8tjObFGIbO0t/h+peH3iJet+oWs+Qh1s/GRyJM/KZJxTyE8mtb5gGpFAqsFz0PUvJBb0zUHtXRqlznOdBHQA8isTQxNZqQGag5LvCuCp+MQnzd8r4xQageY5iT2kN/MqpE8WaY1ePtgHsxT/jd24nhakuhP72bzKq2UojwTMVHgNF4SXcG+QZOLBFZ9eQP1n5FDpSbPbI7rVXB5uc/sR0yFyQF1Q4P0R7kpqI/jAvLf7sOAXmpBgDK28hSpkywe1hk5Hx3V5jFGrdBcPfyq8Zm3YFxVDW3IkfZYJPACYfv2Wsa4VM5pUiZpxsOzE8WIgREm9V8ax5vpggTZtpa1fHKzjODX4wjp4ps8hLJ4y2yhpO98lfckAC0qjLk6MchPosDYQVUEsE0nRyhtD1Zr8DxYC87UY50ZeXs73dYRUgrlQwLAXvGrYedTZq/5ONGvE9kXMpB24lvRYgu48BMNI=
+  file: "$DEPLOY_FILE"
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $DEPLOY = true
