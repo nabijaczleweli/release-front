@@ -29,10 +29,12 @@ SED := sed
 CPP := cpp
 BABEL := babel
 MINIFYJS := minifyjs
+PHANTOMJS := phantomjs
 BABELAR := --no-comments --source-maps inline
 MINIFYJSAR := --minify --level 2
 
 OUTDIR := out/
 BLDDIR := out/build/
 SRCDIR := src/
+TSTDIR := test/
 ASSETDIR := assets/

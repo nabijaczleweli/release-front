@@ -32,7 +32,7 @@ after_success:
       ) >> $TRAVIS_BUILD_DIR/../RELEASE_UPDATE_MSG;
       mkdir -p ~/.ssh && cp gh_rsa ~/.ssh/id_rsa && chmod 700 ~/.ssh && chmod 600 ~/.ssh/id_rsa;
       git clone -b gh-pages "git@github.com:$TRAVIS_REPO_SLUG.git" "$TRAVIS_BUILD_DIR-gh-pages";
-      cp -f out/* "$TRAVIS_BUILD_DIR-gh-pages";
+      cp -rf out/* "$TRAVIS_BUILD_DIR-gh-pages";
       rm -rf "$TRAVIS_BUILD_DIR-gh-pages/build/";
       pushd "$TRAVIS_BUILD_DIR-gh-pages";
       git config --global user.email "nabijaczleweli@gmail.com";

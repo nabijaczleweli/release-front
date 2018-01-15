@@ -25,25 +25,30 @@ include configMakefile
 
 # Args: $<, $@, additional defines
 # `cpp` doesn't like Unicode paths so we do some fuckery for it to not choke thereon
-preprocess_file = cd $(dir $(1)) && $(CPP) $(notdir $(1)) -CC -P -DDATE_TIME="$(shell date "+%d.%m.%Y %H:%M:%S %Z")" -DFILE_NAME="$(1)" -DFILE_NAME_STUB="$(patsubst src/%/,%,$(dir $(1)))" $(DEFAULT_DEFINES) $(ADDITIONAL_TRAVIS_ARGS) $(3) | $(SED) -re "s;COLON_SLASH_SLASH;://;g" -e "s/<!--([[:space:]'\"]*<!--[[:space:]'\"]*)*-->//g" -e "s/FORCED_NEWLINE/\\n/g" -e "s;SLASH_ASTERIX;/*;g" -e "s;/\\*([[:space:]]*(/\\*)*[[:space:]]*)*\\*/;;g" -e "s/​FORCED_SPACER​//g" -e "s/FORCED_MINUS/-/g" -e "s/HASH/\#/g" -e "s/[[:space:]]+^/\\n/g" > $(CURDIR)/$(2)
+preprocess_file = cd $(dir $(1)) && $(CPP) $(notdir $(1)) -P -DDATE_TIME="$(shell date "+%d.%m.%Y %H:%M:%S %Z")" -DFILE_NAME="$(1)" -DFILE_NAME_STUB="$(patsubst src/%/,%,$(dir $(1)))" $(DEFAULT_DEFINES) $(ADDITIONAL_TRAVIS_ARGS) $(3) | $(SED) -re "s;COLON_SLASH_SLASH;://;g" -e "s/<!--([[:space:]'\"]*<!--[[:space:]'\"]*)*-->//g" -e "s/FORCED_NEWLINE/\\n/g" -e "s;SLASH_ASTERIX;/*;g" -e "s;/\\*([[:space:]]*(/\\*)*[[:space:]]*)*\\*/;;g" -e "s/​FORCED_SPACER​//g" -e "s/FORCED_MINUS/-/g" -e "s/HASH/\#/g" -e "s/[[:space:]]+^/\\n/g" > $(CURDIR)/$(2)
 
 
 DEFAULT_DEFINES := $(foreach l,RELEASE_FRONT_VERSION_STR,-D$(l)=$($(l)))
 ASSETS := $(sort $(wildcard assets/*.* assets/**/*.* assets/**/**/*.* assets/**/**/**/*.*))
+LICENSES := $(sort $(wildcard LICENSE*))
+TEST_SOURCES := $(sort $(wildcard $(TSTDIR)*.js $(TSTDIR)**/*.js $(TSTDIR)**/**/*.js $(TSTDIR)**/**/**/*.js))
 JAVASCRIPT_SOURCES := $(sort $(wildcard src/*.js src/**/*.js src/**/**/*.js src/**/**/**/*.js))
 PREPROCESSOR_SOURCES := $(sort $(wildcard src/*.pp src/**/*.pp src/**/**/*.pp src/**/**/**/*.pp))
-LICENSES := $(sort $(wildcard LICENSE*))
 
 
-.PHONY : all clean assets js preprocess licenses
+.PHONY : all clean assets js preprocess licenses tests run-tests
 
-all : assets js preprocess licenses
+all : assets js preprocess licenses tests run-tests
 
 clean :
 	rm -rf $(OUTDIR)
 
+run-tests : $(subst $(TSTDIR),$(BLDDIR)$(TSTDIR),$(TEST_SOURCES)) $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES))
+	$(foreach l,$(filter-out $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$^),phantomjs $(l); echo;)
+
 assets : $(foreach l,$(subst $(ASSETDIR),$(OUTDIR),$(ASSETS)),$(l))
 js : $(foreach l,$(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$(l) $(subst .js,.min.js,$(l)))
+tests : $(subst $(TSTDIR),$(BLDDIR)test/,$(TEST_SOURCES))
 preprocess : $(patsubst src/%.pp,$(OUTDIR)%,$(PREPROCESSOR_SOURCES))
 licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
 
@@ -51,6 +56,11 @@ licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
 $(OUTDIR)%.js : $(SRCDIR)%.js
 	@mkdir -p $(dir $@)
 	$(BABEL) $(BABELAR) $^ --out-file $@
+
+$(BLDDIR)test/%.js : $(TSTDIR)%.js
+	@mkdir -p $(dir $@)
+	grep '//# Preload' $^ | sed -r 's://# Preload "([^"]+)":phantom.injectJs("\1");:' > $@
+	$(BABEL) $(BABELAR) $^ >> $@
 
 $(OUTDIR)%.min.js : $(OUTDIR)%.js
 	@mkdir -p $(dir $@)

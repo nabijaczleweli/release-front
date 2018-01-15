@@ -1,5 +1,5 @@
 # [release-front](https://releases.nabijaczleweli.xyz) [![Build Status](https://travis-ci.org/nabijaczleweli/release-front.svg?branch=master)](https://travis-ci.org/nabijaczleweli/release-front) [![Licence](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-A generic front-end to the GitHub releases system, akin to [the Pachwork one](http://dinosaur.is/patchwork-downloader).
+A generic front-end to the GitHub releases system, akin to [the Patchwork one](http://dinosaur.is/patchwork-downloader).
 
 ## [Live](https://releases.nabijaczleweli.xyz)
 

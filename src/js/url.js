@@ -24,10 +24,10 @@
 export {extract_slug};
 
 
-const EXTRACT_SLUG_REGEX = /(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?([^\/]+)\/([^\/]+).*/i;
+const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
 
 
-/// Get repository slug information from the supplied string – something a user might paste in.
+/// Get repository slug information from the supplied string – something a user might paste in, or an unfiltered query string.
 ///
 /// Arguments: `data`: `string` – wherein the repository slug is contained
 ///
@@ -41,5 +41,3 @@ function extract_slug(data) {
 		repo: sought[1] || null,
 	};
 }
-
-// TODO: add tests
