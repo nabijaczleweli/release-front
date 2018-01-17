@@ -25,22 +25,12 @@ import {extract_slug} from "./url";
 
 
 window.addEventListener("load", () => {
-	const input  = document.getElementById("search-input");
-	const button = document.getElementById("search-button");
+	const search = document.getElementById("search");
+	const main   = document.getElementById("main-display");
 
-	button.addEventListener("click", () => {
-		let slug = extract_slug(input.value);
-
-		if(slug.name !== null && slug.repo !== null) {
-			input.classList.remove("error");
-			input.value = "";
-			window.location.search = slug.name + "/" + slug.repo;
-		} else
-			input.classList.add("error");
-	});
-
-	input.addEventListener("keypress", (ev) => {
-		if(["Enter", "enter"].indexOf(ev.key) != -1)
-			button.click();
-	});
+	let slug = extract_slug(window.location.search);
+	if(slug.name !== null && slug.repo !== null) {
+		main.classList.remove("hidden");
+		search.classList.add("hidden");
+	}
 });

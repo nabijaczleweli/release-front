@@ -29,6 +29,7 @@ preprocess_file = cd $(dir $(1)) && $(CPP) $(notdir $(1)) -P -DDATE_TIME="$(shel
 
 
 DEFAULT_DEFINES := $(foreach l,RELEASE_FRONT_VERSION_STR,-D$(l)=$($(l)))
+DEFAULT_SUBS := $(foreach l,RELEASE_FRONT_VERSION_STR,-e 's/$(l)/$($(l))/g')
 ASSETS := $(sort $(wildcard assets/*.* assets/**/*.* assets/**/**/*.* assets/**/**/**/*.*))
 LICENSES := $(sort $(wildcard LICENSE*))
 TEST_SOURCES := $(sort $(wildcard $(TSTDIR)*.js $(TSTDIR)**/*.js $(TSTDIR)**/**/*.js $(TSTDIR)**/**/**/*.js))
@@ -55,16 +56,16 @@ licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
 
 $(OUTDIR)%.js : $(SRCDIR)%.js
 	@mkdir -p $(dir $@)
-	$(BABEL) $(BABELAR) $^ --out-file $@
+	$(BABEL) $(BABELAR) $^ | sed $(DEFAULT_SUBS) > $@
+
+$(OUTDIR)%.min.js : $(OUTDIR)%.js
+	@mkdir -p $(dir $@)
+	$(MINIFYJS) $(MINIFYJSAR) -i $^ -o $@
 
 $(BLDDIR)test/%.js : $(TSTDIR)%.js
 	@mkdir -p $(dir $@)
 	grep '//# Preload' $^ | sed -r 's://# Preload "([^"]+)":phantom.injectJs("\1");:' > $@
 	$(BABEL) $(BABELAR) $^ >> $@
-
-$(OUTDIR)%.min.js : $(OUTDIR)%.js
-	@mkdir -p $(dir $@)
-	$(MINIFYJS) $(MINIFYJSAR) -i $^ -o $@
 
 $(OUTDIR)% : src/%.pp
 	@mkdir -p $(dir $@)

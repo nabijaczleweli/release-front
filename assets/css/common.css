@@ -1,5 +1,5 @@
-a > i.fa {
-	color: black;
+a {
+	color: initial;
 }
 
 .hidden {
@@ -21,4 +21,18 @@ body {
 	background-color: #015249;
 	color: white;
 	padding: 10px;
+}
+
+a.big-button {
+	text-decoration: none;
+	font-size: 1.4em;
+	display: block;
+}
+
+.link-box {
+  max-width: 400px;
+  text-align: center;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 35px;
 }

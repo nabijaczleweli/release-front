@@ -21,26 +21,36 @@
 // SOFTWARE.
 
 
-import {extract_slug} from "./url";
+import {extract_slug, full_name, latest_release} from "./url";
 
 
 window.addEventListener("load", () => {
-	const input  = document.getElementById("search-input");
-	const button = document.getElementById("search-button");
+	const DOWNLOAD_BUTTON = document.getElementsByClassName("main-button");
 
-	button.addEventListener("click", () => {
-		let slug = extract_slug(input.value);
+	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
+	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
+	const VERSION_CONTAINERS     = document.getElementsByClassName("main-version");
+	const PLATFORM_CONTAINERS    = document.getElementsByClassName("main-platform");
 
-		if(slug.name !== null && slug.repo !== null) {
-			input.classList.remove("error");
-			input.value = "";
-			window.location.search = slug.name + "/" + slug.repo;
-		} else
-			input.classList.add("error");
+	let slug = extract_slug(window.location.search);
+
+	let slug_name = full_name(slug);
+	if(slug_name)
+		Array.from(REPO_NAME_CONTAINERS).forEach(_ => _.innerText = slug_name);
+
+	latest_release(slug, (status, release) => {
+		if(status < 200 || status >= 300)
+			// TODO: what do here?
+			return;
+
+		if(release.html_url)
+			Array.from(LATEST_LINK_CONTAINERS).forEach(_ => _.href = release.html_url);
+
+		if(release.tag_name)
+			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
+
+		console.log(release.assets);
 	});
 
-	input.addEventListener("keypress", (ev) => {
-		if(["Enter", "enter"].indexOf(ev.key) != -1)
-			button.click();
-	});
+	// TODO: detect platform somehow?
 });
