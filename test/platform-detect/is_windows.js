@@ -21,36 +21,30 @@
 // SOFTWARE.
 
 
-import {extract_slug, full_name, latest_release} from "./url";
-import {is_windows as platform_is_windows} from "./platform-detect";
+//# Preload-remote "https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.js"
+//# Preload "../../../js/platform-detect.js"
+//# Preload "../framework.js"
+
+let fs = window.require("fs");
+import platform_js from "platform";
+import {is_windows} from "../../../js/platform-detect";
+import {assert, finish, test_set_name} from "../framework";
 
 
-window.addEventListener("load", () => {
-	const DOWNLOAD_BUTTON = document.getElementsByClassName("main-button");
+test_set_name("platform-detect.is_windows");
 
-	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
-	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
-	const VERSION_CONTAINERS     = document.getElementsByClassName("main-version");
-	const PLATFORM_CONTAINERS    = document.getElementsByClassName("main-platform");
 
-	let slug = extract_slug(window.location.search);
+let windows_useragents = [
+	["Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1", "phantomjs_2_1_1"],
+].concat(JSON.parse(fs.read("test/platform-detect/windows_useragents.json", {mode: "r", charset: "utf-8"})));
 
-	let slug_name = full_name(slug);
-	if(slug_name)
-		Array.from(REPO_NAME_CONTAINERS).forEach(_ => _.innerText = slug_name);
+let non_windows_useragents = [
+	["Mozilla/5.0 (compatible; U; ABrowse 0.6; Syllable) AppleWebKit/420+ (KHTML, like Gecko)", "abrowse_0_6"],
+].concat(JSON.parse(fs.read("test/platform-detect/non_windows_useragents.json", {mode: "r", charset: "utf-8"})));
 
-	latest_release(slug, (status, release) => {
-		if(status < 200 || status >= 300)
-			// TODO: what do here?
-			return;
 
-		if(release.html_url)
-			Array.from(LATEST_LINK_CONTAINERS).forEach(_ => _.href = release.html_url);
+[[windows_useragents, true], [non_windows_useragents, false]].forEach(
+    ([uas, windows]) => uas.forEach(([ua, name]) => assert(is_windows(platform_js.parse(ua)) === windows, `${windows ? "" : "non_"}windows.${name}`)));
 
-		if(release.tag_name)
-			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
 
-		console.log(release.assets);
-		console.log(platform_is_windows());
-	});
-});
+finish();

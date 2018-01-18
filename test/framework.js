@@ -63,6 +63,21 @@ function finish() {
 }
 
 
+phantom.onError = (msg, trace) => {
+	console.log(msg);
+
+	if(trace && trace.length)
+		trace.forEach(_ => {
+			let func_suff = "";
+			if(_.function)
+				func_suff = ` (in function ${_.function})`;
+			console.log(` -> ${_.file || _.sourceURL}: ${_.line}${func_suff}`);
+		});
+
+	phantom.exit(-(failed_tests + 1));
+};
+
+
 // Just exit when run
 if(window.require("system").args[0].indexOf("framework.js") != -1)
 	phantom.exit(0);

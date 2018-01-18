@@ -45,7 +45,7 @@ clean :
 	rm -rf $(OUTDIR)
 
 run-tests : $(subst $(TSTDIR),$(BLDDIR)$(TSTDIR),$(TEST_SOURCES)) $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES))
-	$(foreach l,$(filter-out $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$^),phantomjs $(l); echo;)
+	$(foreach l,$(filter-out $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$^),$(PHANTOMJS) $(l) && echo &&) :
 
 assets : $(foreach l,$(subst $(ASSETDIR),$(OUTDIR),$(ASSETS)),$(l))
 js : $(foreach l,$(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$(l) $(subst .js,.min.js,$(l)))
@@ -56,7 +56,7 @@ licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
 
 $(OUTDIR)%.js : $(SRCDIR)%.js
 	@mkdir -p $(dir $@)
-	$(BABEL) $(BABELAR) $^ | sed $(DEFAULT_SUBS) > $@
+	$(BABEL) $(BABELAR) $^ | $(SED) $(DEFAULT_SUBS) > $@
 
 $(OUTDIR)%.min.js : $(OUTDIR)%.js
 	@mkdir -p $(dir $@)
@@ -64,7 +64,8 @@ $(OUTDIR)%.min.js : $(OUTDIR)%.js
 
 $(BLDDIR)test/%.js : $(TSTDIR)%.js
 	@mkdir -p $(dir $@)
-	grep '//# Preload' $^ | sed -r 's://# Preload "([^"]+)":phantom.injectJs("\1");:' > $@
+	@mkdir -p $(BLDDIR)test-remote/
+	$(AWK) -f "extract-preloads.awk" -v out_dir="$(abspath $(BLDDIR)test-remote)/" -v rel_path="$(shell realpath --relative-to="$(dir $@)" "$(BLDDIR)test-remote")/" $^ > $@
 	$(BABEL) $(BABELAR) $^ >> $@
 
 $(OUTDIR)% : src/%.pp
@@ -75,7 +76,7 @@ $(OUTDIR)% : assets/%
 	@mkdir -p $(dir $@)
 	cp $^ $@
 
-# Not LICENSES% because % cannot be empty for some reason
+# Not LICENSE% because % cannot be empty for some reason
 $(OUTDIR)LICENS% : LICENS%
 	@mkdir -p $(dir $@)
 	cp $^ $@

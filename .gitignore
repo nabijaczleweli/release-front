@@ -9,6 +9,7 @@
 !assets/**
 !.git*
 !*.yml
+!*.awk
 !*Makefile
 !*.sublime-project
 !.clang-format
