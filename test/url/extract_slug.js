@@ -65,5 +65,7 @@ assert(equals(extract_slug("/; So, anyway…"), null_result), "garbage.both_empt
 assert(equals(extract_slug("github.com/?context=deleted"), null_result), "garbage.just_github");
 assert(equals(extract_slug("?&help=unneeded"), null_result), "garbage.just_query");
 
+assert(equals(extract_slug(null), null_result), "null");
+
 
 finish();

@@ -46,23 +46,28 @@ function extract_slug(data) {
 
 /// Get repository slug string from the respective object,
 ///
-/// Arguments: `object` – `{name, repo}: {string?, string?}`, where both `name` and `repo` are the respective parts of the repository slug.
+/// Arguments: `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the repository slug.
 ///
 /// Returns: `string?`, representing the normalised form of the repo slug, or `null`, if supplied object was invalid.
 function full_name(slug) {
-	if(slug.name && slug.repo)
+	if(slug && slug.name && slug.repo)
 		return `${slug.name}/${slug.repo}`;
 	else
 		return null;
 }
 
-/// Get repository slug string from the respective object,
+/// Acquire the latest release data from the specified repository.
 ///
-/// Arguments: `object` – `{name, repo}: {string?, string?}`, where both `name` and `repo` are the respective parts of the repository slug.
+/// Arguments:
+///   * `slug` – `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the requested repository slug.
+///   * `callback` – `function(status: number, response: object)` –
+///                   function to call when the request is finished, where `status` is the response status (`200`/`404`/etc.),
+///                   and `response` is an object in the format returned by the
+///                   [GitHub API v3](https://developer.github.com/v3/repos/releases/#get-the-latest-release).
 ///
-/// Returns: `string?`, representing the normalised form of the repo slug, or `null`, if supplied object was invalid.
+/// Returns: `boolean`, representing whether the request was made.
 function latest_release(slug, callback) {
-	if(callback && slug.name && slug.repo) {
+	if(callback && slug && slug.name && slug.repo) {
 		let url = `//api.github.com/repos/${slug.name}/${slug.repo}/releases/latest`;
 
 		let request = new XMLHttpRequest();
@@ -85,6 +90,3 @@ function latest_release(slug, callback) {
 	} else
 		return false;
 }
-
-
-// TODO: tests for bottom two f()s
