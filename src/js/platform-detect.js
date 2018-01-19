@@ -23,8 +23,17 @@
 
 import platform_js from "platform"; // Provided via "platform.js" library
 
-export {is_windows};
+export {is_mac, is_windows, platform_string};
 
+
+function check_platform(pform, cases) {
+	if(!Array.isArray(cases))
+		cases = [cases];
+
+	return cases.concat(cases.map(_ => _.toLowerCase()))
+	    .concat(cases.map(_ => _.toUpperCase()))
+	    .some(_ => (pform.os && pform.os.family && pform.os.family.indexOf(_) !== -1) || pform.ua.indexOf(_) !== -1);
+}
 
 /// Check whether the specified or current platform are Windowsy.
 ///
@@ -32,5 +41,30 @@ export {is_windows};
 ///
 /// Returns: `boolean`.
 function is_windows(pform = platform_js) {
-	return (pform.os && pform.os.family && pform.os.family.indexOf("Windows") !== -1) || pform.ua.indexOf("Windows") !== -1;
+	return check_platform(pform, "Windows")
+}
+
+/// Check whether the specified or current platform are Apply.
+///
+/// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
+///
+/// Returns: `boolean`.
+function is_mac(pform = platform_js) {
+	return check_platform(pform, ["iOS", "Darwin", "Mac"]);
+}
+
+/// Get a simple string representing who the specified or current platform is.
+///
+/// Valid return values: `"Windows"`, `"Mac"`, `"Linux"`.
+///
+/// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
+///
+/// Returns: `string`.
+function platform_string(pform = platform_js) {
+	if(is_windows(pform))
+		return "Windows";
+	else if(is_mac(pform))
+		return "Mac";
+	else
+		return "Linux";  // Please.
 }

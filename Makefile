@@ -65,7 +65,7 @@ $(OUTDIR)%.min.js : $(OUTDIR)%.js
 $(BLDDIR)test/%.js : $(TSTDIR)%.js
 	@mkdir -p $(dir $@)
 	@mkdir -p $(BLDDIR)test-remote/
-	$(AWK) -f "extract-preloads.awk" -v out_dir="$(abspath $(BLDDIR)test-remote)/" -v rel_path="$(shell realpath --relative-to="$(dir $@)" "$(BLDDIR)test-remote")/" $^ > $@
+	$(AWK) -f "extract-preloads.awk" -v out_dir="$(abspath $(BLDDIR)test-remote)/" -v rel_path="$(shell $(PERL) -MFile::Spec -e "print File::Spec->abs2rel('$(abspath $(BLDDIR)test-remote)','$(abspath $(dir $@))')")/" $^ > $@ # "
 	$(BABEL) $(BABELAR) $^ >> $@
 
 $(OUTDIR)% : src/%.pp

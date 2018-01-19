@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 
+import {platform_string, is_windows as platform_is_windows} from "./platform-detect";
 import {extract_slug, full_name, latest_release} from "./url";
-import {is_windows as platform_is_windows} from "./platform-detect";
 
 
 window.addEventListener("load", () => {
@@ -34,6 +34,9 @@ window.addEventListener("load", () => {
 	const PLATFORM_CONTAINERS    = document.getElementsByClassName("main-platform");
 
 	let slug = extract_slug(window.location.search);
+
+	let pform = platform_string();
+	Array.from(PLATFORM_CONTAINERS).forEach(_ => _.innerText = pform);
 
 	let slug_name = full_name(slug);
 	if(slug_name)
@@ -51,6 +54,6 @@ window.addEventListener("load", () => {
 			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
 
 		console.log(release.assets);
-		console.log(platform_is_windows());
+		console.log("platform_is_windows", platform_is_windows());
 	});
 });

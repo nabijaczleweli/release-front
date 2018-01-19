@@ -27,6 +27,7 @@ RELEASE_FRONT_VERSION_STR := v0.0.0-$(shell git rev-list --count HEAD)-$(shell g
 AWK := awk
 SED := sed
 CPP := cpp
+PERL := perl
 BABEL := babel
 MINIFYJS := minifyjs
 PHANTOMJS := phantomjs

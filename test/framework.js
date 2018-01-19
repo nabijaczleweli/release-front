@@ -56,9 +56,12 @@ function equals(lhs, rhs) {
 
 function finish() {
 	let test_count = successful_tests + failed_tests;
+	let percentage = Math.round((successful_tests / test_count) * 100);
+	if(failed_tests !== 0 && percentage === 100)
+		percentage = 99;
 
 	console.log("");
-	console.log(`${testset_name}: ${successful_tests}/${test_count} ≃ ${Math.round((successful_tests / test_count) * 100)}%`);
+	console.log(`${testset_name}: ${successful_tests}/${test_count} ≃ ${percentage}%`);
 	phantom.exit(failed_tests);
 }
 

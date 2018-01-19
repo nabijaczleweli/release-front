@@ -27,26 +27,25 @@
 
 let fs = window.require("fs");
 import platform_js from "platform";
-import {is_windows} from "../../../js/platform-detect";
+import {is_mac} from "../../../js/platform-detect";
 import {assert, finish, test_set_name} from "../framework";
 
 
-test_set_name("platform-detect.is_windows");
+test_set_name("platform-detect.is_mac");
 
 
-let windows_useragents = [
-	["Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1", "phantomjs_2_1_1"],
-].concat(JSON.parse(fs.read("test-data/windows_useragents.json", {mode: "r", charset: "utf-8"})));
+let mac_useragents = JSON.parse(fs.read("test-data/mac_useragents.json", {mode: "r", charset: "utf-8"}));
 
-let non_windows_useragents =
+let non_mac_useragents =
     [
+	    ["Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1", "phantomjs_2_1_1"],
 	    ["Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.3-dev-release Safari/538.1", "phantomjs_2_1_3_dev_release"],
     ].concat(JSON.parse(fs.read("test-data/non_windows_non_mac_useragents.json", {mode: "r", charset: "utf-8"})))
-        .concat(JSON.parse(fs.read("test-data/mac_useragents.json", {mode: "r", charset: "utf-8"})));
+        .concat(JSON.parse(fs.read("test-data/windows_useragents.json", {mode: "r", charset: "utf-8"})));
 
 
-[[windows_useragents, true], [non_windows_useragents, false]].forEach(
-    ([uas, windows]) => uas.forEach(([ua, name]) => assert(is_windows(platform_js.parse(ua)) === windows, `${windows ? "" : "non_"}windows.${name}`)));
+[[mac_useragents, true], [non_mac_useragents, false]].forEach(
+    ([uas, mac]) => uas.forEach(([ua, name]) => assert(is_mac(platform_js.parse(ua)) === mac, `${mac ? "" : "non_"}mac.${name}`)));
 
 
 finish();

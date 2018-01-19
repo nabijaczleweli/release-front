@@ -19,12 +19,16 @@
 			"path": "src",
 		},
 		{
+			"name": "Assets",
+			"path": "assets",
+		},
+		{
 			"name": "Tests",
 			"path": "test",
 		},
 		{
-			"name": "Assets",
-			"path": "assets",
+			"name": "Test data",
+			"path": "test-data",
 		},
 		{
 			"file_include_patterns":
