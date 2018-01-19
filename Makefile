@@ -56,11 +56,11 @@ licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
 
 $(OUTDIR)%.js : $(SRCDIR)%.js
 	@mkdir -p $(dir $@)
-	$(BABEL) $(BABELAR) $^ | $(SED) $(DEFAULT_SUBS) > $@
+	$(BABEL) $(BABELAR) $^ | $(SED) $(DEFAULT_SUBS) | cat LICENSE-short - > $@
 
 $(OUTDIR)%.min.js : $(OUTDIR)%.js
 	@mkdir -p $(dir $@)
-	$(MINIFYJS) $(MINIFYJSAR) -i $^ -o $@
+	$(MINIFYJS) $(MINIFYJSAR) -i $^ | cat LICENSE-short - > $@
 
 $(BLDDIR)test/%.js : $(TSTDIR)%.js
 	@mkdir -p $(dir $@)
