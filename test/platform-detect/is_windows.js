@@ -22,6 +22,7 @@
 
 
 //# Preload-remote "https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.js"
+//# Preload "../../../js/lib/node-enum.js"
 //# Preload "../../../js/platform-detect.js"
 //# Preload "../framework.js"
 

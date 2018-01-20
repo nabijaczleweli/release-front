@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 
-import {platform_string, is_windows as platform_is_windows} from "./platform-detect";
+import {is_windows as platform_is_windows, Platform} from "./platform-detect";
 import {extract_slug, full_name, latest_release} from "./url";
 
 
@@ -35,8 +35,8 @@ window.addEventListener("load", () => {
 
 	let slug = extract_slug(window.location.search);
 
-	let pform = platform_string();
-	Array.from(PLATFORM_CONTAINERS).forEach(_ => _.innerText = pform);
+	let platform = Platform.from_platform();
+	Array.from(PLATFORM_CONTAINERS).forEach(_ => _.innerText = Platform.name(platform));
 
 	let slug_name = full_name(slug);
 	if(slug_name)

@@ -22,16 +22,17 @@
 
 
 //# Preload-remote "https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.js"
-//# Preload "../../../js/platform-detect.js"
-//# Preload "../framework.js"
+//# Preload "../../../../js/lib/node-enum.js"
+//# Preload "../../../../js/platform-detect.js"
+//# Preload "../../framework.js"
 
 let fs = window.require("fs");
 import platform_js from "platform";
-import {platform_string} from "../../../js/platform-detect";
-import {assert, finish, test_set_name} from "../framework";
+import {Platform} from "../../../js/platform-detect";
+import {assert, finish, equals, test_set_name} from "../framework";
 
 
-test_set_name("platform-detect.platform_string");
+test_set_name("platform-detect.Platform.from_platform");
 
 
 let windows_useragents = [
@@ -45,8 +46,8 @@ let linux_useragents = [
 ].concat(JSON.parse(fs.read("test-data/non_windows_non_mac_useragents.json", {mode: "r", charset: "utf-8"})));
 
 
-[[windows_useragents, "Windows", "windows"], [mac_useragents, "Mac", "mac"], [linux_useragents, "Linux", "linux"]].forEach(
-    ([uas, type, ltype]) => uas.forEach(([ua, name]) => assert(platform_string(platform_js.parse(ua)) === type, `${ltype}.${name}`)));
+[[windows_useragents, Platform.Windows, "windows"], [mac_useragents, Platform.Mac, "mac"], [linux_useragents, Platform.Linux, "linux"]].forEach(
+    ([uas, type, ltype]) => uas.forEach(([ua, name]) => assert(equals(Platform.from_platform(platform_js.parse(ua)), type), `${ltype}.${name}`)));
 
 
 finish();

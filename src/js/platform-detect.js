@@ -21,9 +21,33 @@
 // SOFTWARE.
 
 
+import Enum from "enum";            // Provided via "node-enum" library
 import platform_js from "platform"; // Provided via "platform.js" library
 
-export {is_mac, is_windows, platform_string};
+
+export const Platform = Enum("Windows", "Linux", "Mac");
+
+/// Convert platform back to string representation.
+Platform.name = _ => Platform.keys[_] || "Unknown";
+
+/// Get  who the specified or current platform is.
+///
+/// Valid return values: `"Windows"`, `"Mac"`, `"Linux"`.
+///
+/// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
+///
+/// Returns: `number` from the `Platform` enum.
+Platform.from_platform = (pform = platform_js) => {
+	if(is_windows(pform))
+		return Platform.Windows;
+	else if(is_mac(pform))
+		return Platform.Mac;
+	else
+		return Platform.Linux;  // Please.
+};
+
+if(Object.freeze)
+	Object.freeze(Platform);
 
 
 function check_platform(pform, cases) {
@@ -40,7 +64,7 @@ function check_platform(pform, cases) {
 /// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
 ///
 /// Returns: `boolean`.
-function is_windows(pform = platform_js) {
+export function is_windows(pform = platform_js) {
 	return check_platform(pform, "Windows")
 }
 
@@ -49,22 +73,6 @@ function is_windows(pform = platform_js) {
 /// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
 ///
 /// Returns: `boolean`.
-function is_mac(pform = platform_js) {
+export function is_mac(pform = platform_js) {
 	return check_platform(pform, ["iOS", "Darwin", "Mac"]);
-}
-
-/// Get a simple string representing who the specified or current platform is.
-///
-/// Valid return values: `"Windows"`, `"Mac"`, `"Linux"`.
-///
-/// Arguments: `pform`: `object?` – platform to check, defaults to the current detected one.
-///
-/// Returns: `string`.
-function platform_string(pform = platform_js) {
-	if(is_windows(pform))
-		return "Windows";
-	else if(is_mac(pform))
-		return "Mac";
-	else
-		return "Linux";  // Please.
 }

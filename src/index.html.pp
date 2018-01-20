@@ -16,6 +16,7 @@
 		<link href="css/main-display.css" rel="stylesheet" />
 
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.min.js"></script>
+		<script type="text/javascript" src="js/lib/node-enum.min.js"></script>
 		<script type="text/javascript" src="js/url.min.js"></script>
 		<script type="text/javascript" src="js/platform-detect.min.js"></script>
 		<script type="text/javascript" src="js/select.min.js"></script>

@@ -21,9 +21,6 @@
 // SOFTWARE.
 
 
-export {extract_slug, full_name, latest_release};
-
-
 const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
 const GITHUB_API_ACCEPT  = "application/vnd.github.v3+json";
 
@@ -34,7 +31,7 @@ const GITHUB_API_ACCEPT  = "application/vnd.github.v3+json";
 ///
 /// Returns: `object` – `{name, repo}: {string?, string?}`, where both `name` and `repo` are the respective parts of the repository slug or `null`, if not
 /// found.
-function extract_slug(data) {
+export function extract_slug(data) {
 	let sought = EXTRACT_SLUG_REGEX.exec(data) || [];
 	sought.shift();  // Drop whole string
 
@@ -49,7 +46,7 @@ function extract_slug(data) {
 /// Arguments: `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the repository slug.
 ///
 /// Returns: `string?`, representing the normalised form of the repo slug, or `null`, if supplied object was invalid.
-function full_name(slug) {
+export function full_name(slug) {
 	if(slug && slug.name && slug.repo)
 		return `${slug.name}/${slug.repo}`;
 	else
@@ -66,7 +63,7 @@ function full_name(slug) {
 ///                   [GitHub API v3](https://developer.github.com/v3/repos/releases/#get-the-latest-release).
 ///
 /// Returns: `boolean`, representing whether the request was made.
-function latest_release(slug, callback) {
+export function latest_release(slug, callback) {
 	if(callback && slug && slug.name && slug.repo) {
 		let url = `//api.github.com/repos/${slug.name}/${slug.repo}/releases/latest`;
 

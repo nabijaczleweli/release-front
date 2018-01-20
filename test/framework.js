@@ -21,19 +21,16 @@
 // SOFTWARE.
 
 
-export {assert, equals, finish, test_set_name};
-
-
 let testset_name     = "";
 let successful_tests = 0;
 let failed_tests     = 0;
 
 
-function test_set_name(name) {
+export function test_set_name(name) {
 	testset_name = name;
 }
 
-function assert(ass, who_this) {
+export function assert(ass, who_this) {
 	let func = ass ? console.log : console.warn;
 	let str  = ass ? "👌" : "👎";
 
@@ -44,7 +41,7 @@ function assert(ass, who_this) {
 }
 
 /// Solution stolen from https://stackoverflow.com/a/11039915/2851815
-function equals(lhs, rhs) {
+export function equals(lhs, rhs) {
 	function _equals(lhs, rhs) {
 		let clone    = jQuery_extend(true, {}, lhs);
 		let cloneStr = JSON.stringify(clone);
@@ -53,8 +50,7 @@ function equals(lhs, rhs) {
 
 	return _equals(lhs, rhs) && _equals(rhs, lhs);
 }
-
-function finish() {
+export function finish() {
 	let test_count = successful_tests + failed_tests;
 	let percentage = Math.round((successful_tests / test_count) * 100);
 	if(failed_tests !== 0 && percentage === 100)

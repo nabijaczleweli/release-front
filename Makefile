@@ -37,9 +37,9 @@ JAVASCRIPT_SOURCES := $(sort $(wildcard src/*.js src/**/*.js src/**/**/*.js src/
 PREPROCESSOR_SOURCES := $(sort $(wildcard src/*.pp src/**/*.pp src/**/**/*.pp src/**/**/**/*.pp))
 
 
-.PHONY : all clean assets js preprocess licenses tests run-tests
+.PHONY : all clean assets node-enum js preprocess licenses tests run-tests
 
-all : assets js preprocess licenses tests run-tests
+all : assets node-enum js preprocess licenses tests run-tests
 
 clean :
 	rm -rf $(OUTDIR)
@@ -48,10 +48,24 @@ run-tests : $(subst $(TSTDIR),$(BLDDIR)$(TSTDIR),$(TEST_SOURCES)) $(subst src/,$
 	$(foreach l,$(filter-out $(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$^),$(PHANTOMJS) $(l) && echo &&) :
 
 assets : $(foreach l,$(subst $(ASSETDIR),$(OUTDIR),$(ASSETS)),$(l))
+node-enum : $(foreach l,js min.js,$(OUTDIR)js/lib/node-enum.$(l))
 js : $(foreach l,$(subst src/,$(OUTDIR),$(JAVASCRIPT_SOURCES)),$(l) $(subst .js,.min.js,$(l)))
 tests : $(subst $(TSTDIR),$(BLDDIR)test/,$(TEST_SOURCES))
 preprocess : $(patsubst src/%.pp,$(OUTDIR)%,$(PREPROCESSOR_SOURCES))
 licenses : $(foreach l,$(LICENSES),$(OUTDIR)$(l))
+
+
+$(OUTDIR)js/lib/node-enum.js : ext/node-enum/lib/micro-enum.js
+	@mkdir -p $(dir $@) $(BLDDIR)
+	echo "export default Enum;" > $(BLDDIR)node-enum.js
+	sed 's/Enum[[:space:]]*=[[:space:]]*function/function Enum/' $^ >> $(BLDDIR)node-enum.js
+	sed 's;^;// ;' ext/node-enum/LICENSE > $@
+	$(BABEL) $(BABELAR) --module-id "enum" $(BLDDIR)node-enum.js >> $@
+
+$(OUTDIR)js/lib/node-enum.min.js : $(OUTDIR)js/lib/node-enum.js
+	@mkdir -p $(dir $@)
+	sed 's;^;// ;' ext/node-enum/LICENSE > $@
+	$(MINIFYJS) $(MINIFYJSAR) -i $^ >> $@
 
 
 $(OUTDIR)%.js : $(SRCDIR)%.js
@@ -60,7 +74,8 @@ $(OUTDIR)%.js : $(SRCDIR)%.js
 
 $(OUTDIR)%.min.js : $(OUTDIR)%.js
 	@mkdir -p $(dir $@)
-	$(MINIFYJS) $(MINIFYJSAR) -i $^ | cat LICENSE-short - > $@
+	cat LICENSE-short > $@
+	$(MINIFYJS) $(MINIFYJSAR) -i $^ >> $@
 
 $(BLDDIR)test/%.js : $(TSTDIR)%.js
 	@mkdir -p $(dir $@)
