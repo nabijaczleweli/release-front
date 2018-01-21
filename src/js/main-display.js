@@ -22,11 +22,12 @@
 
 
 import {is_windows as platform_is_windows, Platform} from "./platform-detect";
-import {extract_slug, full_name, latest_release} from "./url";
+import {extract_slug, find_logo, full_name, latest_release} from "./url";
 
 
 window.addEventListener("load", () => {
-	const DOWNLOAD_BUTTON = document.getElementsByClassName("main-button");
+	const DOWNLOAD_BUTTON = document.getElementById("main-button");
+	const LOGO            = document.getElementById("main-logo");
 
 	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
 	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
@@ -50,8 +51,15 @@ window.addEventListener("load", () => {
 		if(release.html_url)
 			Array.from(LATEST_LINK_CONTAINERS).forEach(_ => _.href = release.html_url);
 
-		if(release.tag_name)
+		if(release.tag_name) {
 			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
+			find_logo(slug, release.tag_name, logo_url => {
+				if(logo_url) {
+					LOGO.src = logo_url;
+					LOGO.classList.remove("hidden");
+				}
+			});
+		}
 
 		console.log(release.assets);
 		console.log("platform_is_windows", platform_is_windows());

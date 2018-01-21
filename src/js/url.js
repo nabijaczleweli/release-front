@@ -21,8 +21,10 @@
 // SOFTWARE.
 
 
-const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
-const GITHUB_API_ACCEPT  = "application/vnd.github.v3+json";
+const EXTRACT_SLUG_REGEX   = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
+const GITHUB_API_ACCEPT    = "application/vnd.github.v3+json";
+const LOGO_SEARCH_SUBPATHS = ["logo", "assets/logo"];
+const LOGO_EXTENSIONS      = ["png", "jpg"];
 
 
 /// Get repository slug information from the supplied string – something a user might paste in, or an unfiltered query string.
@@ -82,6 +84,60 @@ export function latest_release(slug, callback) {
 			}
 		});
 		request.send();
+
+		return true;
+	} else
+		return false;
+}
+
+/// Search for a logo file in the repository under the specified commitish.
+///
+/// Arguments:
+///   * `slug` – `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the requested repository slug.
+///   * `commitish` – `string` – tag/commit/branch to look in.
+///   * `callback` – `function(url: string?)` –
+///                   function called
+///                   (a) with the logo url when either a logo was found or
+///                   (b) with `null` when all search paths errored.
+///
+/// Returns: `boolean`, representing whether the requests were made.
+export function find_logo(slug, commitish, callback) {
+	if(callback && commitish && slug && slug.name && slug.repo) {
+		let url_base = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}`;
+
+		let logo_options_count = LOGO_SEARCH_SUBPATHS.length * LOGO_EXTENSIONS.length;
+		let finished_requests  = 0;
+		let finish             = false;
+
+		for(let subpath of LOGO_SEARCH_SUBPATHS)
+			for(let extension of LOGO_EXTENSIONS) {
+				let url     = `${url_base}/${subpath}.${extension}`;
+        let request = new XMLHttpRequest();
+				request.open("GET", url);
+				// Using User-Agent from browsers doesn't work apparently :v
+				// request.setRequestHeader("User-Agent", `release-front/RELEASE_FRONT_VERSION_STR`);
+
+				request.addEventListener("readystatechange", () => {
+					if(finish) {
+						request.abort();
+						return;
+					}
+
+					if(request.readyState >= XMLHttpRequest.HEADERS_RECEIVED) {
+						let status = request.status + 0;
+
+						++finished_requests;
+						request.abort();
+
+						if(status >= 200 && status < 300) {
+							finish = true;
+							callback(url);
+						} else if(finished_requests === logo_options_count)
+							callback(null);
+					}
+				});
+				request.send();
+			}
 
 		return true;
 	} else
