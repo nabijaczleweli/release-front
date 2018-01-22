@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/nabijaczleweli
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://releases.nabijaczleweli.xyz
+  * I am nabijaczleweli (https://keybase.io/nabijaczleweli) on keybase.
+  * I have a public key ASBSsJe-yZc-VroKrMyVfVsWwV5K7lVHCCwK7PMV-noDAQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101e3a640e5b919a15dccc546fc8e609b631d0e84c825f731b51efd87cb64c2a1660a",
+      "host": "keybase.io",
+      "kid": "012052b097bec9973e56ba0aaccc957d5b16c15e4aee5547082c0aecf315fa7a03010a",
+      "uid": "c53aa309c826ed4295e29f1450a75219",
+      "username": "nabijaczleweli"
+    },
+    "service": {
+      "hostname": "releases.nabijaczleweli.xyz",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.18"
+  },
+  "ctime": 1516662725,
+  "expire_in": 504576000,
+  "merkle_root": {
+    "ctime": 1516662724,
+    "hash": "77fd11752516d49d977427682ee02472c81af6f70b102ce97b1f6ad2e4dd7acccafbb809c5c4f0126c05c5afbe4a933c33c248c8ca7aea066f9d251a6c5214a7",
+    "seqno": 1959143
+  },
+  "prev": "01ab4c64d8b9c30db145d171af78ca037daaff16c76ac0320fdd1dfa35b94086",
+  "seqno": 35,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgUrCXvsmXPla6CqzMlX1bFsFeSu5VRwgsCuzzFfp6AwEKp3BheWxvYWTFAwt7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTAxZTNhNjQwZTViOTE5YTE1ZGNjYzU0NmZjOGU2MDliNjMxZDBlODRjODI1ZjczMWI1MWVmZDg3Y2I2NGMyYTE2NjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNTJiMDk3YmVjOTk3M2U1NmJhMGFhY2NjOTU3ZDViMTZjMTVlNGFlZTU1NDcwODJjMGFlY2YzMTVmYTdhMDMwMTBhIiwidWlkIjoiYzUzYWEzMDljODI2ZWQ0Mjk1ZTI5ZjE0NTBhNzUyMTkiLCJ1c2VybmFtZSI6Im5hYmlqYWN6bGV3ZWxpIn0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJyZWxlYXNlcy5uYWJpamFjemxld2VsaS54eXoiLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4xOCJ9LCJjdGltZSI6MTUxNjY2MjcyNSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNTE2NjYyNzI0LCJoYXNoIjoiNzdmZDExNzUyNTE2ZDQ5ZDk3NzQyNzY4MmVlMDI0NzJjODFhZjZmNzBiMTAyY2U5N2IxZjZhZDJlNGRkN2FjY2NhZmJiODA5YzVjNGYwMTI2YzA1YzVhZmJlNGE5MzNjMzNjMjQ4YzhjYTdhZWEwNjZmOWQyNTFhNmM1MjE0YTciLCJzZXFubyI6MTk1OTE0M30sInByZXYiOiIwMWFiNGM2NGQ4YjljMzBkYjE0NWQxNzFhZjc4Y2EwMzdkYWFmZjE2Yzc2YWMwMzIwZmRkMWRmYTM1Yjk0MDg2Iiwic2Vxbm8iOjM1LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQGabLlxgBP6u6t/L2J97gVHqj0yvnncS91NKBgGSd8HLZ+V6Qio6pG4iGRKgm4ECG9ji0Jpida+qChHnY58WTAeoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCA5qBjmeT7dxrLaShOLnwAK9vqaUYXUbi3x3pk918ejQqN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/nabijaczleweli
+
+==================================================================
