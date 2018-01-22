@@ -1,0 +1,63 @@
+/* Copyright (C) 1991-2014 Free Software Foundation, Inc.
+   This file is part of the GNU C Library.
+
+   The GNU C Library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   The GNU C Library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with the GNU C Library; if not, see
+   <http://www.gnu.org/licenses/>.  */
+/* This header is separate from features.h so that the compiler can
+   include it implicitly at the start of every compilation.  It must
+   not itself include <features.h> or any other header that includes
+   <features.h> because the implicit include comes before any feature
+   test macros that may be defined in a source file before it first
+   explicitly includes a system header.  GCC knows the name of this
+   header in order to preinclude it.  */
+/* glibc's intent is to support the IEC 559 math functionality, real
+   and complex.  If the GCC (4.9 and later) predefined macros
+   specifying compiler intent are available, use them to determine
+   whether the overall intent is to support these features; otherwise,
+   presume an older compiler has intent to support these features and
+   define these macros by default.  */
+/* wchar_t uses ISO/IEC 10646 (2nd ed., published 2011-03-15) /
+   Unicode 6.0.  */
+/* We do not support C11 <threads.h>.  */
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+  <link href="//nabijaczleweli.xyz/content/writing/the_taste_of_mi/Merriweather-font.css" rel="stylesheet" />
+  <link href="//nabijaczleweli.xyz/content/writing/Roboto-font.css" rel="stylesheet" />
+  <link href="css/DejaVu-Sans-Mono.css" rel="stylesheet" />
+  <link href="css/common.css" rel="stylesheet" />
+  <link href="css/search.css" rel="stylesheet" />
+  <link href="css/footer.css" rel="stylesheet" />
+  <script type="text/javascript" src="js/url.min.js"></script>
+  <script type="text/javascript" src="js/search.min.js"></script>
+  <title>release-front</title>
+ </head>
+ <body class="roboto">
+<div id="search">
+ <h1 class="smallcaps merriweather">release-front</h1>
+ <input id="search-input" class="roboto-em" placeholder="Repository slug/URL" type="text" spellcheck="false" />
+ <div class="link-box-small">
+  <a id="search-button" class="search link-button">
+   Get release
+  </a>
+ </div>
+</div>
+<footer>
+ <a href="https://github.com/nabijaczleweli/release-front">release-front</a> v0.0.0-6-6ef909c
+</footer>
+ </body>
+</html>
