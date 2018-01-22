@@ -1,0 +1,51 @@
+/*
+roboto-slab (c) by nabijaczleweli@gmail.com (nabijaczleweli)
+​
+roboto-slab is licensed under the MIT License.
+​
+You should have received a copy of the license along with this
+work. If not, see <https:
+*/
+       
+
+ @font-face {
+ font-family: "DejaVu Sans Mono";
+ font-style: normal;
+ font-weight: normal;
+ src: local("DejaVu Sans Mono Oblique"),
+ url("../font/DejaVu/DejaVuSansMono.ttf") format("truetype");
+ }
+
+ @font-face {
+ font-family: "DejaVu Sans Mono";
+ font-style: normal;
+ font-weight: bold;
+ src: local("DejaVu Sans Mono Oblique"),
+ url("../font/DejaVu/DejaVuSansMono-Bold.ttf") format("truetype");
+ }
+
+ @font-face {
+ font-family: "DejaVu Sans Mono";
+ font-style: oblique;
+ font-weight: bold;
+ src: local("DejaVu Sans Mono Oblique"),
+ url("../font/DejaVu/DejaVuSansMono-BoldOblique.ttf") format("truetype");
+ }
+
+ @font-face {
+ font-family: "DejaVu Sans Mono";
+ font-style: oblique;
+ font-weight: normal;
+ src: local("DejaVu Sans Mono Oblique"),
+ url("../font/DejaVu/DejaVuSansMono-Oblique.ttf") format("truetype");
+ }
+.dejavu, code, samp, pre, tt {
+ font-family: "DejaVu Sans Mono", monospace;
+ font-size: calc(22em / 23);
+}
+.dejavu-unscale {
+ font-size: calc(23em / 22);
+}
+.dejavu-em {
+ font-family: "DejaVu Sans Mono", monospace;
+}
