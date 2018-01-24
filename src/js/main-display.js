@@ -21,7 +21,8 @@
 // SOFTWARE.
 
 
-import {is_windows as platform_is_windows, Platform} from "./platform-detect";
+import {rank_assets} from "./assets";
+import {Platform} from "./platform-detect";
 import {extract_slug, find_logo, full_name, latest_release} from "./url";
 
 
@@ -59,9 +60,14 @@ window.addEventListener("load", () => {
 					LOGO.classList.remove("hidden");
 				}
 			});
-		}
 
-		console.log(release.assets);
-		console.log("platform_is_windows", platform_is_windows());
+			let ranked_assets = rank_assets(slug.repo, release.tag_name, release.assets, platform);
+			ranked_assets.sort((lhs, rhs) => rhs.score - lhs.score);  // biggest-to-smallest => [0] has best asset
+			if(ranked_assets.length === 0) {
+				DOWNLOAD_BUTTON.innerText = "No assets found";
+				DOWNLOAD_BUTTON.href      = release.html_url;
+			} else
+				DOWNLOAD_BUTTON.href = ranked_assets[0].data.browser_download_url;
+		}
 	});
 });

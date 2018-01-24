@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="js/lib/node-enum.min.js"></script>
 		<script type="text/javascript" src="js/url.min.js"></script>
 		<script type="text/javascript" src="js/platform-detect.min.js"></script>
+		<script type="text/javascript" src="js/assets.min.js"></script>
 		<script type="text/javascript" src="js/select.min.js"></script>
 		<script type="text/javascript" src="js/search.min.js"></script>
 		<script type="text/javascript" src="js/main-display.min.js"></script>
