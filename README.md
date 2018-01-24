@@ -20,7 +20,7 @@ The contents of the project release page itself depend on the contents of the re
 If the repo contains no tags, the latest commit to the default branch is used instead.
 
 If the repo at the latest tag contains a logo image in a Findable Spot (TODO: concretify where we look), it's displayed at the top-center,
-	otherwise, a heading with the repo name is used.
+	otherwise, only a heading with the repo name is used.
 
 // TODO: concretify detexion of system, system-specific (or not) release binaries, etc
 

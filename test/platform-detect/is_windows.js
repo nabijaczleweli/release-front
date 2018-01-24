@@ -37,13 +37,13 @@ test_set_name("platform-detect.is_windows");
 
 let windows_useragents = [
 	["Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1", "phantomjs_2_1_1"],
-].concat(JSON.parse(fs.read("test-data/windows_useragents.json", {mode: "r", charset: "utf-8"})));
+].concat(JSON.parse(fs.read("test-data/useragents/windows.json", {mode: "r", charset: "utf-8"})));
 
 let non_windows_useragents =
     [
 	    ["Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.3-dev-release Safari/538.1", "phantomjs_2_1_3_dev_release"],
-    ].concat(JSON.parse(fs.read("test-data/non_windows_non_mac_useragents.json", {mode: "r", charset: "utf-8"})))
-        .concat(JSON.parse(fs.read("test-data/mac_useragents.json", {mode: "r", charset: "utf-8"})));
+    ].concat(JSON.parse(fs.read("test-data/useragents/non_windows_non_mac.json", {mode: "r", charset: "utf-8"})))
+        .concat(JSON.parse(fs.read("test-data/useragents/mac.json", {mode: "r", charset: "utf-8"})));
 
 
 [[windows_useragents, true], [non_windows_useragents, false]].forEach(

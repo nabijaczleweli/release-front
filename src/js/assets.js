@@ -28,7 +28,7 @@ const PACK_EXTENSIONS = [".tar", ".tgz", ".tgz2", ".tbz2", ".xz", ".zip"];
 
 const WINDOWS_REGEXES = [/\.exe$/];
 const LINUX_REGEXES   = [/\.out$/, /^[^.]+$/];
-const MAC_REGEXES     = [];  // TODO?
+const MAC_REGEXES     = [/\.dmg$/];
 
 const MANUAL_REGEX        = /man/i;
 const DOCUMENTATION_REGEX = /doc/i;
@@ -68,6 +68,8 @@ export function rank_assets(project_name, tag_name, assets, platform) {
 			for(let ext = ""; ext !== undefined; ext = PACK_EXTENSIONS.find(_ => data_name_reduced.endsWith(_)))
 				data_name_reduced = data_name_reduced.substr(0, data_name_reduced.length - ext.length);
 			data_name_reduced = data_name_reduced.replace(tag_name, "");
+			if(tag_name.startsWith("v"))
+				data_name_reduced = data_name_reduced.replace(tag_name.substr(1), "");
 
 			let score = 0;
 

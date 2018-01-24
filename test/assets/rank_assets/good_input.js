@@ -21,33 +21,42 @@
 // SOFTWARE.
 
 
+//# Preload-remote "https://cdn.rawgit.com/jsPolyfill/Array.prototype.find/master/find.js"
+//# Preload-remote "https://cdn.rawgit.com/mathiasbynens/String.prototype.endsWith/master/endswith.js"
+//# Preload-remote "https://cdn.rawgit.com/mathiasbynens/String.prototype.startsWith/master/startswith.js"
+//# Preload-remote "https://cdn.rawgit.com/es-shims/get-own-property-symbols/master/build/get-own-property-symbols.max.js"
 //# Preload-remote "https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.js"
 //# Preload "../../../../js/lib/node-enum.js"
 //# Preload "../../../../js/platform-detect.js"
+//# Preload "../../../../js/assets.js"
 //# Preload "../../framework.js"
 
 let fs = window.require("fs");
-import platform_js from "platform";
-import {Platform} from "../../../js/platform-detect";
-import {assert, finish, equals, test_set_name} from "../framework";
+import {Platform} from "../../../../js/platform-detect";
+import {rank_assets} from "../../../../js/assets";
+import {assert, equals, finish, test_set_name} from "../../framework";
 
 
-test_set_name("platform-detect.Platform.from_platform");
+test_set_name("assets.rank_assets.good_input");
 
 
-let windows_useragents = [
-	["Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1", "phantomjs_2_1_1"],
-].concat(JSON.parse(fs.read("test-data/useragents/windows.json", {mode: "r", charset: "utf-8"})));
+let cargo_update = [
+	"v1.4.1", "nabijaczleweli", "cargo-update", (() => {
+	  let scores               = {};
+	  scores[Platform.Windows] = [-1, 2, 0, -1];
+	  scores[Platform.Mac]     = [-1, 0, 0, -1];
+	  scores[Platform.Linux]   = [1, 0, 2, 1];
+	  return scores;
+	})()
+];
 
-let mac_useragents = JSON.parse(fs.read("test-data/useragents/mac.json", {mode: "r", charset: "utf-8"}));
+[cargo_update].forEach(([tag_name, owner, repo_name, scores]) => {
+	let assets = JSON.parse(fs.read(`test-data/assets/${owner}_${repo_name}-${tag_name}.json`, {mode: "r", charset: "utf-8"}));
 
-let linux_useragents = [
-	["Mozilla/5.0 (Unknown; Linux x86_64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.3-dev-release Safari/538.1", "phantomjs_2_1_3_dev_release"],
-].concat(JSON.parse(fs.read("test-data/useragents/non_windows_non_mac.json", {mode: "r", charset: "utf-8"})));
-
-
-[[windows_useragents, Platform.Windows, "windows"], [mac_useragents, Platform.Mac, "mac"], [linux_useragents, Platform.Linux, "linux"]].forEach(
-    ([uas, type, ltype]) => uas.forEach(([ua, name]) => assert(equals(Platform.from_platform(platform_js.parse(ua)), type), `${ltype}.${name}`)));
+	for(let pform of Platform.all)
+		assert(equals(rank_assets(repo_name, tag_name, assets, pform), assets.map((data, idx) => ({score: scores[pform][idx], data}))),
+		       `${repo_name}.${Platform.name(pform).toLowerCase()}`);
+});
 
 
 finish();
