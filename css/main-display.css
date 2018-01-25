@@ -1,0 +1,13 @@
+.logo {
+	max-width: 50%;
+	display: block;
+	margin: auto;
+}
+
+.repo-name {
+	margin-bottom: 10px;
+}
+
+.smol {
+	font-size: .9em;
+}
