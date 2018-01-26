@@ -10,19 +10,31 @@ A generic front-end to the GitHub releases system, akin to [the Patchwork one](h
 If you just want to check it out, see [this live version](https://releases.nabijaczleweli.xyz), always up-to-date with `master`.
 Alternatively, use Rawgit to see any older version under `https://cdn.rawgit.com/nabijaczleweli/release-front/<COMMIT HASH>/index.html`.
 
-To display a release for a specific repo query the repo slug in the form of `?owner/repo` or put the slug in the input box.
-(TODO: can I do that/does that work?)
+To display a release for a specific repo query the repo slug in the form of `?owner/repo` or put the slug/GitHub URL to somewhere within the repo in the input box.
 
 ### Overview
 
 The contents of the project release page itself depend on the contents of the repo and the latest tag.
 
-If the repo contains no tags, the latest commit to the default branch is used instead.
+If the repo contains no tags, an error is presented.
 
-If the repo at the latest tag contains a logo image in a Findable Spot (TODO: concretify where we look), it's displayed at the top-center,
-	otherwise, only a heading with the repo name is used.
+If the repo at the latest tag contains a logo image in a [Findable Spot™](#logo-search-paths), it's displayed at the top-center,
+	otherwise, a heading with just the repo name is used.
 
-// TODO: concretify detexion of system, system-specific (or not) release binaries, etc
+The local system is guessed from the browser's user agent and divided into three categories: Windows, Mac, and Linux,
+	where Linux is equivalent to "not Windows and not Mac".
+
+The release's assets are ranked according to their names, the most significant is the extension – "exe" for Windows, "dmg" for Mac, and "out"/none for Linux.
+For ranking details, see the [documentation of `assets::rank_assets()`](src/js/assets.js).
+
+TODO: explicit "config" file
+
+### Details
+
+#### Logo search paths
+
+First found file named any of: "logo", "icon" under: the repository root, "assets" folder extended with any of: "png", "jpg".<br />
+Or, if you want to be very pedantic: first hit in `["", "assets/"]×["logo", "icon"]×[".png", ".jpg"]`.
 
 ### Self-hosting
 

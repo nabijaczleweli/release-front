@@ -46,7 +46,7 @@ window.addEventListener("load", () => {
 
 	latest_release(slug, (status, release) => {
 		if(status < 200 || status >= 300)
-			// TODO: what do here?
+			// TODO: present error (change butan colour &/or text?)
 			return;
 
 		if(release.html_url)

@@ -26,6 +26,7 @@ import {Platform} from "./platform-detect";
 
 const PACK_EXTENSIONS = [".tar", ".tgz", ".tgz2", ".tbz2", ".xz", ".zip"];
 
+// Remember to update in README.md
 const WINDOWS_REGEXES = [/\.exe$/];
 const LINUX_REGEXES   = [/\.out$/, /^[^.]+$/];
 const MAC_REGEXES     = [/\.dmg$/];

@@ -23,6 +23,8 @@
 
 const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
 const GITHUB_API_ACCEPT  = "application/vnd.github.v3+json";
+
+// Remember to update in README.md
 const LOGO_SEARCH_PATHS  = ["", "assets/"];
 const LOGO_SEARCH_NAMES  = ["logo", "icon"];
 const LOGO_EXTENSIONS    = ["png", "jpg"];
