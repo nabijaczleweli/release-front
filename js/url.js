@@ -1,3 +1,8 @@
+/*!
+ * release-front <https://github.com/nabijaczleweli/release-front>
+ * Copyright 2018 nabijaczleweli <https://nabijaczleweli.xyz>
+ * Available under MIT license <https://opensource.org/licenses/mit>
+ */
 (function (global, factory) {
 	if (typeof define === "function" && define.amd) {
 		define(["exports"], factory);
