@@ -29,6 +29,9 @@ import {extract_slug, find_logo, full_name, latest_release} from "./url";
 window.addEventListener("load", () => {
 	const DOWNLOAD_BUTTON = document.getElementById("main-button");
 	const LOGO            = document.getElementById("main-logo");
+	const REPO_LINE       = document.getElementById("main-repo-line");
+	const LATEST_LINE     = document.getElementById("main-latest-line");
+	const HEADING_LINK    = document.getElementById("main-heading-link");
 
 	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
 	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
@@ -41,13 +44,20 @@ window.addEventListener("load", () => {
 	Array.from(PLATFORM_CONTAINERS).forEach(_ => _.innerText = Platform.name(platform));
 
 	let slug_name = full_name(slug);
-	if(slug_name)
+	if(slug_name) {
+		HEADING_LINK.href = `//github.com/${slug_name}`;
 		Array.from(REPO_NAME_CONTAINERS).forEach(_ => _.innerText = slug_name);
+	}
 
 	latest_release(slug, (status, release) => {
-		if(status < 200 || status >= 300)
-			// TODO: present error (change butan colour &/or text?)
+		if(status < 200 || status >= 300) {
+			REPO_LINE.classList.add("hidden");
+			LATEST_LINE.classList.add("hidden");
+			DOWNLOAD_BUTTON.classList.add("error");
+			DOWNLOAD_BUTTON.innerText = "No releases found";
+			DOWNLOAD_BUTTON.addEventListener("click", () => window.location.search = "");
 			return;
+		}
 
 		if(release.html_url)
 			Array.from(LATEST_LINK_CONTAINERS).forEach(_ => _.href = release.html_url);

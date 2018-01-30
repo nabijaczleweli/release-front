@@ -34,29 +34,31 @@
 	<h1 class="smallcaps merriweather">release-front</h1>
 	<input id="search-input" class="roboto-em" placeholder="Repository slug/URL" type="text" spellcheck="false" />
 	<div class="link-box link-box-small">
-		<a id="search-button" class="big-button link-button">
+		<a id="search-button" class="no-decoration big-button link-button">
 			Get release
 		</a>
 	</div>
 </div>
 
 <div id="main-display" class="hidden">
-	<img src="" id="main-logo" class="logo hidden" />
-	<h1 class="smallcaps merriweather repo-name main-repo-name">…</h1>
+	<a href="#" id="main-heading-link" class="no-decoration">
+		<img src="" id="main-logo" class="logo hidden" />
+		<h1 class="smallcaps merriweather repo-name main-repo-name">…</h1>
+	</a>
 
-	<p>
+	<p id="main-repo-line">
 		<em>
 			This will download the <a href="#" class="main-latest-link">latest version from <span class="main-repo-name">…</span>'s<!--'--> GitHub page</a>.
 		</em>
 	</p>
 
 	<div class="link-box">
-		<a id="main-button" class="big-button link-button">
+		<a id="main-button" class="no-decoration big-button link-button">
 			Download for <span class="main-platform">UNKNOWN</span>
 		</a>
 	</div>
 
-	<p class="smol">
+	<p id="main-latest-line" class="smol">
 		<em>
 			Latest version is <a href="#" class="main-latest-link"><span class="main-version">UNKNOWN</span></a>.
 		</em>
