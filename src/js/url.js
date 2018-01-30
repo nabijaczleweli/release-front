@@ -21,13 +21,16 @@
 // SOFTWARE.
 
 
+import {cartesian} from "./util";
+
+
 const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
 const GITHUB_API_ACCEPT  = "application/vnd.github.v3+json";
 
 // Remember to update in README.md
-const LOGO_SEARCH_PATHS  = ["", "assets/"];
-const LOGO_SEARCH_NAMES  = ["logo", "icon"];
-const LOGO_EXTENSIONS    = ["png", "jpg"];
+const LOGO_SEARCH_PATHS = ["", "assets/"];
+const LOGO_SEARCH_NAMES = ["logo", "icon"];
+const LOGO_EXTENSIONS   = ["png", "jpg"];
 
 
 /// Get repository slug information from the supplied string – something a user might paste in, or an unfiltered query string.
@@ -108,40 +111,38 @@ export function find_logo(slug, commitish, callback) {
 	if(callback && commitish && slug && slug.name && slug.repo) {
 		let url_base = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}`;
 
-		let logo_options_count = LOGO_SEARCH_PATHS.length * LOGO_SEARCH_NAMES.length * LOGO_EXTENSIONS.length;
-		let finished_requests  = 0;
-		let finish             = false;
+		let logo_options  = cartesian(LOGO_SEARCH_PATHS, LOGO_SEARCH_NAMES, LOGO_EXTENSIONS);
+		let requests_left = logo_options.length;
 
-		for(let path of LOGO_SEARCH_PATHS)
-			for(let name of LOGO_SEARCH_NAMES)
-				for(let extension of LOGO_EXTENSIONS) {
-					let url     = `${url_base}/${path}${name}.${extension}`;
-          let request = new XMLHttpRequest();
-					request.open("GET", url);
-					// Using User-Agent from browsers doesn't work apparently :v
-					// request.setRequestHeader("User-Agent", `release-front/RELEASE_FRONT_VERSION_STR`);
+		let requests = logo_options.map(([path, name, extension], idx) => {
+			let url     = `${url_base}/${path}${name}.${extension}`;
+      let request = new XMLHttpRequest();
+			request.open("GET", url);
+			// Using User-Agent from browsers doesn't work apparently :v
+			// request.setRequestHeader("User-Agent", `release-front/RELEASE_FRONT_VERSION_STR`);
 
-					request.addEventListener("readystatechange", () => {
-						if(finish) {
-							request.abort();
-							return;
-						}
+			let aborted = false;
+			request.addEventListener("readystatechange", () => {
+				if(!aborted && requests_left !== 0 && request.readyState >= XMLHttpRequest.HEADERS_RECEIVED) {
+					aborted = true;  // do this ASAP
 
-						if(request.readyState >= XMLHttpRequest.HEADERS_RECEIVED) {
-							let status = request.status + 0;
+					let status = request.status | 0;  // | 0 to make a copy
 
-							++finished_requests;
-							request.abort();
+					request.abort();
+					--requests_left;
 
-							if(status >= 200 && status < 300) {
-								finish = true;
-								callback(url);
-							} else if(finished_requests === logo_options_count)
-								callback(null);
-						}
-					});
-					request.send();
+					if(status >= 200 && status < 300) {
+						requests_left = -1;  // Don't allow any other threads to trigger `null` case
+						requests.forEach(_ => _.abort());
+						callback(url);
+					} else if(requests_left === 0)
+						callback(null);
 				}
+			});
+			request.send();
+
+			return request;
+		});
 
 		return true;
 	} else

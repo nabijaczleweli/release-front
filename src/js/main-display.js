@@ -56,7 +56,9 @@ window.addEventListener("load", () => {
 			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
 			find_logo(slug, release.tag_name, logo_url => {
 				if(logo_url) {
-					LOGO.src = logo_url;
+					LOGO.src   = logo_url;
+					LOGO.alt   = `${slug_name} logo`;
+					LOGO.title = LOGO.alt;
 					LOGO.classList.remove("hidden");
 				}
 			});
