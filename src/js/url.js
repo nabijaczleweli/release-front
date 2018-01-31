@@ -114,7 +114,7 @@ export function find_logo(slug, commitish, callback) {
 		let logo_options  = cartesian(LOGO_SEARCH_PATHS, LOGO_SEARCH_NAMES, LOGO_EXTENSIONS);
 		let requests_left = logo_options.length;
 
-		let requests = logo_options.map(([path, name, extension], idx) => {
+		let requests = logo_options.map(([path, name, extension]) => {
 			let url     = `${url_base}/${path}${name}.${extension}`;
       let request = new XMLHttpRequest();
 			request.open("GET", url);
@@ -143,6 +143,68 @@ export function find_logo(slug, commitish, callback) {
 
 			return request;
 		});
+
+		return true;
+	} else
+		return false;
+}
+
+/// Get and deconstruct the repo's configuration, if any.
+///
+/// Arguments:
+///   * `slug` – `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the requested repository slug.
+///   * `commitish` – `string` – tag/commit/branch to look in.
+///   * `callback` – `function(logo_url: string?, asset_spec: object?)`, `asset_spec: {[platform name: template string]}` –
+///                   function called when request is complete.
+///                   If the request returns an error both arguments are `null`.
+///                   Otherwise, the appropriate entries in the config file are parsed and passed accordingly (if existant).
+///
+/// Returns: `boolean`, representing whether the request was made.
+export function get_config(slug, commitish, callback) {
+	if(callback && commitish && slug && slug.name && slug.repo) {
+		let url     = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}/release-front.json`;
+    let request = new XMLHttpRequest();
+		request.open("GET", url);
+		// Using User-Agent from browsers doesn't work apparently :v
+		// request.setRequestHeader("User-Agent", `release-front/RELEASE_FRONT_VERSION_STR`);
+
+		request.addEventListener("readystatechange", () => {
+			if(request.readyState === XMLHttpRequest.DONE) {
+				if(request.status >= 200 && request.status < 300) {
+					// FF doesn't seem to auto-decode JSON
+					let response = typeof request.response === "string" ? JSON.parse(request.response) : request.response;
+					if(typeof response === "object") {
+						let logo_url = response.logo || response.logo_url;
+						if(typeof logo_url === "string") {
+							if(logo_url.indexOf("//") === -1)
+								logo_url = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}/${logo_url}`;
+						} else
+							logo_url = null;
+
+						let asset_spec = response.assets || response.asset_spec;
+						if(typeof asset_spec === "object" && asset_spec !== null)  // Because null is an object, obviously
+							for(let key in asset_spec)
+								if(typeof asset_spec[key] === "string" && asset_spec[key].length !== 0) {
+									let key_lcase = key.toLowerCase();
+									if(key !== key_lcase) {
+										asset_spec[key_lcase] = asset_spec[key];
+										delete asset_spec[key];
+									}
+								} else if(asset_spec[key] !== null)
+									delete asset_spec[key];
+						else
+							asset_spec = null;
+
+						callback(logo_url, asset_spec);
+						return;
+					}
+				}
+
+				callback(null, null);
+			}
+		});
+
+		request.send();
 
 		return true;
 	} else

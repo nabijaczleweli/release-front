@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 
-import {rank_assets} from "./assets";
+import {extract_asset_for, rank_assets, specifies_assets_for} from "./assets";
 import {Platform} from "./platform-detect";
-import {extract_slug, find_logo, full_name, latest_release} from "./url";
+import {extract_slug, find_logo, full_name, get_config, latest_release} from "./url";
 
 
 window.addEventListener("load", () => {
@@ -64,22 +64,43 @@ window.addEventListener("load", () => {
 
 		if(release.tag_name) {
 			Array.from(VERSION_CONTAINERS).forEach(_ => _.innerText = release.tag_name);
-			find_logo(slug, release.tag_name, logo_url => {
+
+			let logo_callback = logo_url => {
 				if(logo_url) {
 					LOGO.src   = logo_url;
 					LOGO.alt   = `${slug_name} logo`;
 					LOGO.title = LOGO.alt;
 					LOGO.classList.remove("hidden");
 				}
-			});
+			};
+			let assets_callback = ranked_assets => {
+				if(!Array.isArray(ranked_assets))
+					if(ranked_assets === null)
+						ranked_assets = [];
+					else
+						ranked_assets = [ranked_assets];
 
-			let ranked_assets = rank_assets(slug.repo, release.tag_name, release.assets, platform);
-			ranked_assets.sort((lhs, rhs) => rhs.score - lhs.score);  // biggest-to-smallest => [0] has best asset
-			if(ranked_assets.length === 0) {
-				DOWNLOAD_BUTTON.innerText = "No assets found";
-				DOWNLOAD_BUTTON.href      = release.html_url;
-			} else
-				DOWNLOAD_BUTTON.href = ranked_assets[0].data.browser_download_url;
+				if(ranked_assets.length === 0) {
+					DOWNLOAD_BUTTON.innerText = "No assets found";
+					DOWNLOAD_BUTTON.href      = release.html_url;
+				} else
+					DOWNLOAD_BUTTON.href = ranked_assets[0].data.browser_download_url;
+			};
+
+			get_config(slug, release.tag_name, (logo_url, asset_spec) => {
+				if(logo_url)
+					logo_callback(logo_url);
+				else
+					find_logo(slug, release.tag_name, logo_callback);
+
+				if(asset_spec && specifies_assets_for(asset_spec, platform))
+					assets_callback(extract_asset_for(asset_spec, platform, release.tag_name));
+				else {
+					let ranked_assets = rank_assets(slug.repo, release.tag_name, release.assets, platform);
+					ranked_assets.sort((lhs, rhs) => rhs.score - lhs.score);  // biggest-to-smallest => [0] has best asset
+					assets_callback(ranked_assets);
+				}
+			});
 		}
 	});
 });
