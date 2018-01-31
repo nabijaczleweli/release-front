@@ -20,9 +20,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-# TODO: uncomment when there's a first tag
-# RELEASE_FRONT_VERSION_STR := $(shell git describe)
-RELEASE_FRONT_VERSION_STR := v0.0.0-$(shell git rev-list --count HEAD)-$(shell git log -1 --pretty=format:%h | grep -v gpg)
+RELEASE_FRONT_VERSION_STR := $(shell git describe)
 
 AWK := awk
 SED := sed

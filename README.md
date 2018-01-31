@@ -34,7 +34,7 @@ TODO: explicit "config" file
 #### Logo search paths
 
 First found file named any of: "logo", "icon" under: the repository root, "assets" folder extended with any of: "png", "jpg".<br />
-Or, if you want to be very pedantic: first hit in `["", "assets/"]×["logo", "icon"]×[".png", ".jpg"]`.
+Or, if you want to be very pedantic: first hit in `["", "assets/"]`×`["logo", "icon"]`×`[".png", ".jpg"]`.
 
 ### Self-hosting
 
