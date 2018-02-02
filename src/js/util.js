@@ -29,3 +29,15 @@ export function cartesian(a, b, ...c) {
 
 	return b ? cartesian(cartesian_hilfer(a, b), ...c) : a;
 }
+
+/// Based on https://stackoverflow.com/a/1145525/2851815
+///
+/// Arguments:
+///   * `whom` – `string` – the string to replace in
+///   * `what` – `string` – the string to replace
+///   * `wit` – `string` – the string to replace with
+///
+/// Returns: `string` – `whom` with all instances of `what` replaced with `wit`
+export function replace_all(whom, what, wit) {
+	return whom.split(what).join(wit);
+}

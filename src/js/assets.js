@@ -22,7 +22,7 @@
 
 
 import {Platform} from "./platform-detect";
-import {replace_all} from "./string";
+import {replace_all} from "./util";
 
 
 const PACK_EXTENSIONS = [".tar", ".tgz", ".tgz2", ".tbz2", ".xz", ".zip"];

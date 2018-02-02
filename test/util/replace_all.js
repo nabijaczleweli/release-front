@@ -21,14 +21,19 @@
 // SOFTWARE.
 
 
-/// Based on https://stackoverflow.com/a/1145525/2851815
-///
-/// Arguments:
-///   * `whom` – `string` – the string to replace in
-///   * `what` – `string` – the string to replace
-///   * `wit` – `string` – the string to replace with
-///
-/// Returns: `string` – `whom` with all instances of `what` replaced with `wit`
-export function replace_all(whom, what, wit) {
-	return whom.split(what).join(wit);
-}
+//# Preload "../../../js/util.js"
+//# Preload "../framework.js"
+
+import {replace_all} from "../../../js/util";
+import {assert, equals, finish, test_set_name} from "../framework";
+
+
+test_set_name("util.replace_all");
+
+
+assert(replace_all("Test abc test test abc test test test abc test test abc", "abc", "$") === "Test $ test test $ test test test $ test test $", "simple");
+assert(replace_all("Test test test test test test test test", "abc", "$") === "Test test test test test test test test", "no_matches");
+assert(replace_all("Test. test test. test test test. test test.", ".", "$") === "Test$ test test$ test test test$ test test$", "special_chars");
+
+
+finish();

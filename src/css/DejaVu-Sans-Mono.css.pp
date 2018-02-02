@@ -11,21 +11,21 @@ work. If not, see <https://opensource.org/licenses/MIT>.
 #include "../util.h"
 
 
-#define DEJAVU_FACE(lstyle, cstyle, wght)                     FORCED_NEWLINE \
+#define DEJAVU_FACE(lstyle, LStyle, cstyle, wght)             FORCED_NEWLINE \
 	@font-face {                                                FORCED_NEWLINE \
 		font-family: "DejaVu Sans Mono";                          FORCED_NEWLINE \
 		font-style: lstyle;                                       FORCED_NEWLINE \
 		font-weight: wght;                                        FORCED_NEWLINE \
-		src: local("DejaVu Sans Mono Oblique"),                   FORCED_NEWLINE \
+		src: local(STR(DejaVu Sans Mono LStyle)),                 FORCED_NEWLINE \
 		     url(STR(../font/DejaVu/DejaVuSansMono##cstyle.ttf))                 \
 		       format("truetype");                                FORCED_NEWLINE \
 	}
 
 
-DEJAVU_FACE(normal,                         , normal)
-DEJAVU_FACE(normal,  FORCED_MINUSBold       , bold )
-DEJAVU_FACE(oblique, FORCED_MINUSBoldOblique, bold )
-DEJAVU_FACE(oblique, FORCED_MINUSOblique    , normal)
+DEJAVU_FACE(normal,         ,                        , normal)
+DEJAVU_FACE(normal,         , FORCED_MINUSBold       , bold )
+DEJAVU_FACE(oblique, Oblique, FORCED_MINUSBoldOblique, bold )
+DEJAVU_FACE(oblique, Oblique, FORCED_MINUSOblique    , normal)
 
 
 .dejavu, code, samp, pre, tt {

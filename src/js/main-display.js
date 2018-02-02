@@ -31,8 +31,8 @@ window.addEventListener("load", () => {
 	const LOGO            = document.getElementById("main-logo");
 	const REPO_LINE       = document.getElementById("main-repo-line");
 	const LATEST_LINE     = document.getElementById("main-latest-line");
-	const HEADING_LINK    = document.getElementById("main-heading-link");
 
+	const HEADING_LINKS          = document.getElementsByClassName("main-heading-link");
 	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
 	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
 	const VERSION_CONTAINERS     = document.getElementsByClassName("main-version");
@@ -45,7 +45,7 @@ window.addEventListener("load", () => {
 
 	let slug_name = full_name(slug);
 	if(slug_name) {
-		HEADING_LINK.href = `//github.com/${slug_name}`;
+		Array.from(HEADING_LINKS).forEach(_ => _.href = `//github.com/${slug_name}`);
 		Array.from(REPO_NAME_CONTAINERS).forEach(_ => _.innerText = slug_name);
 	}
 
