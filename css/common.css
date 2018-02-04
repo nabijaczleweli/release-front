@@ -2,6 +2,10 @@ a {
 	color: initial;
 }
 
+a.no-decoration {
+	text-decoration: none;
+}
+
 .hidden {
 	display: none;
 }
@@ -18,13 +22,21 @@ body {
 
 .link-button {
 	cursor: pointer;
-	background-color: #015249;
 	color: white;
 	padding: 10px;
+	border-radius: 0.2em;
+	transition: background-color 0.3s, box-shadow 0.3s;
+
+	background-color: #015249;
+	box-shadow: 0.2em 0.2em 0.5em #013731;  /* V divided by 1.5 in HSV repr of background-color */
+}
+
+.link-button:active {
+	background-color: #027B6E;  /* V multiplied by 1.5 in original HSV repr of background-color */
+	box-shadow: 0.2em 0.2em 0.5em #015249;  /* V divided by 1.5 in HSV repr of background-color => equal to original background-color */
 }
 
 a.big-button {
-	text-decoration: none;
 	font-size: 1.4em;
 	display: block;
 }
