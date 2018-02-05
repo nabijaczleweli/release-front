@@ -21,7 +21,8 @@
 // SOFTWARE.
 
 
-import {cartesian} from "./util";
+import {Platform} from "./platform-detect";
+import {cartesian, string_or} from "./util";
 
 
 const EXTRACT_SLUG_REGEX = /^(?:(?:(?:(?:(?:http(?:s)?:)?\/\/)?github\.com\/)?)|\?)([a-zA-Z0-9-_.]+)\/([a-zA-Z0-9-_.]+).*/i;
@@ -154,7 +155,7 @@ export function find_logo(slug, commitish, callback) {
 /// Arguments:
 ///   * `slug` – `object` – `{name, repo}: {string, string}`, where both `name` and `repo` are the respective parts of the requested repository slug.
 ///   * `commitish` – `string` – tag/commit/branch to look in.
-///   * `callback` – `function(logo_url: string?, asset_spec: object?)`, `asset_spec: {[platform name: template string]}` –
+///   * `callback` – `function(logo_url: string?, asset_spec: object?, platform_name_override: string?)`, `asset_spec: {[platform name: template string]}` –
 ///                   function called when request is complete.
 ///                   If the request returns an error both arguments are `null`.
 ///                   Otherwise, the appropriate entries in the config file are parsed and passed accordingly (if existant).
@@ -175,32 +176,50 @@ export function get_config(slug, commitish, callback) {
 					let response = typeof request.response === "string" ? JSON.parse(request.response) : request.response;
 					if(typeof response === "object") {
 						let logo_url = response.logo || response.logo_url;
-						if(typeof logo_url === "string") {
+						if(typeof logo_url === "string" && logo_url.length !== 0) {
 							if(logo_url.indexOf("//") === -1)
 								logo_url = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}/${logo_url}`;
 						} else
 							logo_url = null;
 
-						let asset_spec = response.assets || response.asset_spec;
-						if(typeof asset_spec === "object" && asset_spec !== null)  // Because null is an object, obviously
-							for(let key in asset_spec)
-								if(typeof asset_spec[key] === "string" && asset_spec[key].length !== 0) {
-									let key_lcase = key.toLowerCase();
-									if(key !== key_lcase) {
-										asset_spec[key_lcase] = asset_spec[key];
-										delete asset_spec[key];
-									}
-								} else if(asset_spec[key] !== null)
-									delete asset_spec[key];
-						else
-							asset_spec = null;
+						let platform_name_override = null;
+						let asset_spec             = null;
+						let universal              = response.universal;
+						if(universal === true)
+							platform_name_override = "universal";
+						else if(typeof universal === "object" && universal !== null) {
+							platform_name_override = string_or(universal.name, universal.platform, universal.pseudo_platform)
 
-						callback(logo_url, asset_spec);
+							    let ass = universal.asset || universal.asset_spec;
+							if(typeof ass === "string" && ass.length !== 0) {
+								asset_spec = {};
+								for(let pname of Platform.keys)
+									asset_spec[pname] = ass;
+							}
+						}
+
+						if(asset_spec === null) {
+							asset_spec = response.assets || response.asset_spec || null;
+							if(typeof asset_spec === "object" && asset_spec !== null)  // Because null is an object, obviously
+								for(let key in asset_spec)
+									if(typeof asset_spec[key] === "string" && asset_spec[key].length !== 0) {
+										let key_lcase = key.toLowerCase();
+										if(key !== key_lcase) {
+											asset_spec[key_lcase] = asset_spec[key];
+											delete asset_spec[key];
+										}
+									} else if(asset_spec[key] !== null)
+										delete asset_spec[key];
+									else
+										asset_spec = null;
+						}
+
+						callback(logo_url, asset_spec, platform_name_override);
 						return;
 					}
 				}
 
-				callback(null, null);
+				callback(null, null, null);
 			}
 		});
 

@@ -18,8 +18,8 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.min.js"></script>
 		<script type="text/javascript" src="js/lib/node-enum.min.js"></script>
 		<script type="text/javascript" src="js/util.min.js"></script>
-		<script type="text/javascript" src="js/url.min.js"></script>
 		<script type="text/javascript" src="js/platform-detect.min.js"></script>
+		<script type="text/javascript" src="js/url.min.js"></script>
 		<script type="text/javascript" src="js/assets.min.js"></script>
 		<script type="text/javascript" src="js/select.min.js"></script>
 		<script type="text/javascript" src="js/search.min.js"></script>
@@ -59,7 +59,7 @@
 	<div class="link-box">
 		<a id="main-button" class="no-decoration big-button link-button">
 			<samp>
-				Download for <span class="main-platform">UNKNOWN</span>
+				Download <span class="main-platform-precedent">for</span> <span class="main-platform">UNKNOWN</span>
 			</samp>
 		</a>
 	</div>

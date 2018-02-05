@@ -25,7 +25,7 @@
 //# Preload "../framework.js"
 
 import {replace_all} from "../../../js/util";
-import {assert, equals, finish, test_set_name} from "../framework";
+import {assert, finish, test_set_name} from "../framework";
 
 
 test_set_name("util.replace_all");

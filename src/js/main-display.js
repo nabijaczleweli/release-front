@@ -32,11 +32,12 @@ window.addEventListener("load", () => {
 	const REPO_LINE       = document.getElementById("main-repo-line");
 	const LATEST_LINE     = document.getElementById("main-latest-line");
 
-	const HEADING_LINKS          = document.getElementsByClassName("main-heading-link");
-	const REPO_NAME_CONTAINERS   = document.getElementsByClassName("main-repo-name");
-	const LATEST_LINK_CONTAINERS = document.getElementsByClassName("main-latest-link");
-	const VERSION_CONTAINERS     = document.getElementsByClassName("main-version");
-	const PLATFORM_CONTAINERS    = document.getElementsByClassName("main-platform");
+	const HEADING_LINK_CONTAINERS       = document.getElementsByClassName("main-heading-link");
+	const REPO_NAME_CONTAINERS          = document.getElementsByClassName("main-repo-name");
+	const LATEST_LINK_CONTAINERS        = document.getElementsByClassName("main-latest-link");
+	const VERSION_CONTAINERS            = document.getElementsByClassName("main-version");
+	const PLATFORM_CONTAINERS           = document.getElementsByClassName("main-platform");
+	const PLATFORM_PRECEDENT_CONTAINERS = document.getElementsByClassName("main-platform-precedent");
 
 	let slug = extract_slug(window.location.search);
 
@@ -45,7 +46,7 @@ window.addEventListener("load", () => {
 
 	let slug_name = full_name(slug);
 	if(slug_name) {
-		Array.from(HEADING_LINKS).forEach(_ => _.href = `//github.com/${slug_name}`);
+		Array.from(HEADING_LINK_CONTAINERS).forEach(_ => _.href = `//github.com/${slug_name}`);
 		Array.from(REPO_NAME_CONTAINERS).forEach(_ => _.innerText = slug_name);
 	}
 
@@ -87,7 +88,7 @@ window.addEventListener("load", () => {
 					DOWNLOAD_BUTTON.href = ranked_assets[0].data.browser_download_url;
 			};
 
-			get_config(slug, release.tag_name, (logo_url, asset_spec) => {
+			get_config(slug, release.tag_name, (logo_url, asset_spec, platform_name_override) => {
 				if(logo_url)
 					logo_callback(logo_url);
 				else
@@ -99,6 +100,11 @@ window.addEventListener("load", () => {
 					let ranked_assets = rank_assets(slug.repo, release.tag_name, release.assets, platform);
 					ranked_assets.sort((lhs, rhs) => rhs.score - lhs.score);  // biggest-to-smallest => [0] has best asset
 					assets_callback(ranked_assets);
+				}
+
+				if(typeof platform_name_override === "string") {
+					Array.from(PLATFORM_PRECEDENT_CONTAINERS).forEach(_ => _.innerText = "");
+					Array.from(PLATFORM_CONTAINERS).forEach(_ => _.innerText = platform_name_override);
 				}
 			});
 		}

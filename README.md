@@ -29,27 +29,49 @@ For ranking details, see the [documentation of `assets::rank_assets()`](src/js/a
 
 ### Configuration
 
-If you distribute your assets with a non-obvious naming scheme or your logo is in a non-["standard"](#logo-search-paths) place,
+If you distribute your assets with a non-obvious naming scheme, your logo is in a non-["standard"](#logo-search-paths) place,
+	or you distribute universal/non-platform-dependent assets,
 	you may wish to use an explicit configuration file to specify them for use with release-front.
 
 To do so, create a file named "release-front.json" on the branch with content in the following format:
 
-|     Property name     | Property type | Required? | Description |
-|-----------------------|---------------|-----------|-------------|
-|   `logo`/`logo_url`   |    `string`   |     No    | Either custom subpath to the logo (e.g. `"images/logo.jpeg2000"`), or a URL to one (e.g. `"//dinosaur.is/patchwork-downloader/images/invite-letterhead.jpg"`). Defaults to [the normal search](#logo-search-paths). |
-| `assets`/`asset_spec` |    `object`   |     No    | If present, overrides default asset ranking. The object keys are, case-insensitive, all optional, any of `"Windows"`, `"Mac"`, `"Linux"` – values are [templated strings](#configuration-asset-names-templates) resolving to the names of the assets (e.g. `"cargo-install-update-${TAG_NAME}.exe"`). If a key for a platform is missing, or the value `null`, it is treated as if there were no assets for that platform. |
+|     Property name     |    Property type   | Required? | Description |
+|-----------------------|--------------------|-----------|-------------|
+|   `logo`/`logo_url`   |       `string`     |     No    | Either custom subpath to the logo (e.g. `"images/logo.jpeg2000"`), or a URL to one (e.g. `"//dinosaur.is/patchwork-downloader/images/invite-letterhead.jpg"`). Defaults to [the normal search](#logo-search-paths). |
+| `assets`/`asset_spec` |       `object`     |     No    | If present, overrides default asset ranking. The object keys are, case-insensitive, all optional, any of `"Windows"`, `"Mac"`, `"Linux"` – values are [templated strings](#configuration-asset-names-templates) resolving to the names of the assets (e.g. `"cargo-install-update-${TAG_NAME}.exe"`). If a key for a platform is missing, or the value `null`, it is treated as if there were no assets for that platform. |
+|      `universal`      | `boolean`/`object` |     No    | If present, overrides `assets`. If `true`, equivalent to `{platform: "universal"}`. For more details, see table below. |
 
-For example:
+Configuration of universal/platform-independent releases (after normalisation, e.g. from `true`):
 
-```json
+|            Property name            |    Property type   | Required? | Description |
+|-------------------------------------|--------------------|-----------|-------------|
+| `name`/`platform`/`pseudo_platform` |       `string`     |     No    | If present, platform name to use instead of `"for [Windows/Mac/Linux]"`. Used in form `"Download <name>"`. |
+|         `asset`/`asset_spec`        |       `string`     |     No    | If present, the name of the *single* asset to use, regardless of platform, [templated](#configuration-asset-names-templates) as usual. |
+
+For example, config for an app with a repository-local logo and releases for Windows and Linux:
+
+```js
 {
 	// This will use the specified path within the repo at the tag.
 	"logo": "theobromines/images/big/1241.JPG",
 
 	"asset_spec": {
-		"Windows": "chemlab-3k-${TAG_NAME}.exe",   // e.g. for the tag "v0.3.1", this'd yield "chemlab-3k-v0.3.1.exe"
-		"mac": null,                               // Might as well've been omitted.
-		"LINUX": "chemlab3k_${TAG_NAME_REDUCED}",  // e.g. for the tag "v0.3.1", this'd yield "chemlab3k_0.3.1"
+		"Windows": "chemlab-3k-${TAG_NAME}.exe",  // e.g. for the tag "v0.3.1", this'd yield "chemlab-3k-v0.3.1.exe"
+		"mac": null,                              // Might as well've been omitted.
+		"LINUX": "chemlab3k_${TAG_NAME_REDUCED}"  // e.g. for the tag "v0.3.1", this'd yield "chemlab3k_0.3.1"
+	}
+}
+```
+
+Otherwise, an example for a universal app with a remote logo:
+
+```js
+{
+	"logo": "//dinosaur.is/patchwork-downloader/images/invite-letterhead.jpg",
+
+	"universal": {
+		"platform": "",                                   // => the button will just say "Download"
+		"asset": "patchwork-invite-${TAG_NAME}.min.html"
 	}
 }
 ```

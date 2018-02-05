@@ -21,39 +21,23 @@
 // SOFTWARE.
 
 
-/// Adapted from https://stackoverflow.com/a/43053803/2851815
-export function cartesian(a, b, ...c) {
-	function cartesian_hilfer(a, b) {
-		return [].concat(...a.map(d => b.map(e => [].concat(d, e))))
-	}
+//# Preload-remote "https://cdn.rawgit.com/es-shims/get-own-property-symbols/master/build/get-own-property-symbols.max.js"
+//# Preload "../../../js/util.js"
+//# Preload "../framework.js"
 
-	return b ? cartesian(cartesian_hilfer(a, b), ...c) : a;
-}
+import {string_or} from "../../../js/util";
+import {assert, equals, finish, test_set_name} from "../framework";
 
-/// Based on https://stackoverflow.com/a/1145525/2851815
-///
-/// Arguments:
-///   * `whom` – `string` – the string to replace in
-///   * `what` – `string` – the string to replace
-///   * `wit` – `string` – the string to replace with
-///
-/// Returns: `string` – `whom` with all instances of `what` replaced with `wit`
-export function replace_all(whom, what, wit) {
-	return whom.split(what).join(wit);
-}
 
-/// Equivalent of `||` terminated with `null`, but handles empty strings right.
-export function string_or(...strings) {
-	let ret = null;
-	for(let str of strings) {
-		ret = str;
-		if(typeof ret === "string")
-			break;
-	}
+test_set_name("util.string_or");
 
-	// Make sure the return type is a string or `null`, even if someone snuck an object in
-	if(typeof ret !== "string")
-		ret = null;
 
-	return ret
-}
+assert(string_or(null, undefined, "anarcho-syndicalism", null) === "anarcho-syndicalism", "simple");
+
+assert(string_or(null, undefined, {}) === null, "ends_with.object");
+assert(string_or(null, undefined, 0) === null, "ends_with.number");
+assert(string_or(null, undefined) === null, "ends_with.undefined");
+assert(string_or(undefined, null) === null, "ends_with.null");
+
+
+finish();
