@@ -22,6 +22,7 @@
 		<script type="text/javascript" src="js/url.min.js"></script>
 		<script type="text/javascript" src="js/assets.min.js"></script>
 		<script type="text/javascript" src="js/select.min.js"></script>
+		<script type="text/javascript" src="js/title.min.js"></script>
 		<script type="text/javascript" src="js/search.min.js"></script>
 		<script type="text/javascript" src="js/main-display.min.js"></script>
 

@@ -95,4 +95,4 @@ All templates take the form of `"${TEMPNAME}"`, where `TEMPNAME` is one of the f
 ### Self-hosting
 
 Just copy the contents of the `gh-pages` branch or build the page yourself and slam it (the branch, or the contents of the `out` folder)
-	in any static server under any access path and it should Just Work.
+	in any static server under any access path and it should Just Work™.

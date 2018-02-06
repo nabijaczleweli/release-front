@@ -21,24 +21,13 @@
 // SOFTWARE.
 
 
-//# Preload-remote "https://cdn.rawgit.com/es-shims/get-own-property-symbols/master/build/get-own-property-symbols.max.js"
-//# Preload "../../../js/util.js"
-//# Preload "../framework.js"
-
-import {string_or} from "../../../js/util";
-import {assert, equals, finish, test_set_name} from "../framework";
+import {extract_slug, full_name} from "./url";
 
 
-test_set_name("util.string_or");
+window.addEventListener("load", () => {
+	let slug = extract_slug(window.location.search);
+	let slug_name = full_name(slug);
 
-
-assert(string_or(null, undefined, "anarcho-syndicalism", null) === "anarcho-syndicalism", "simple");
-assert(string_or(null, undefined, "", null) === "", "empty");
-
-assert(string_or(null, undefined, {}) === null, "ends_with.object");
-assert(string_or(null, undefined, 0) === null, "ends_with.number");
-assert(string_or(null, undefined) === null, "ends_with.undefined");
-assert(string_or(undefined, null) === null, "ends_with.null");
-
-
-finish();
+	if(slug_name)
+		document.title += ` – ${slug_name}`;
+});
