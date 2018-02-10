@@ -12,7 +12,7 @@ work. If not, see <https:
  font-family: "DejaVu Sans Mono";
  font-style: normal;
  font-weight: normal;
- src: local("DejaVu Sans Mono Oblique"),
+ src: local("DejaVu Sans Mono"),
  url("../font/DejaVu/DejaVuSansMono.ttf") format("truetype");
  }
 
@@ -20,7 +20,7 @@ work. If not, see <https:
  font-family: "DejaVu Sans Mono";
  font-style: normal;
  font-weight: bold;
- src: local("DejaVu Sans Mono Oblique"),
+ src: local("DejaVu Sans Mono"),
  url("../font/DejaVu/DejaVuSansMono-Bold.ttf") format("truetype");
  }
 
