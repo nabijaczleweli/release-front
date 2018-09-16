@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 
-//# Preload-remote "https://cdn.rawgit.com/jsPolyfill/Array.prototype.find/master/find.js"
-//# Preload-remote "https://cdn.rawgit.com/mathiasbynens/String.prototype.startsWith/master/startswith.js"
+//# Preload-remote "https://rawcdn.githack.com/jsPolyfill/Array.prototype.find/master/find.js"
+//# Preload-remote "https://rawcdn.githack.com/mathiasbynens/String.prototype.startsWith/master/startswith.js"
 //# Preload-remote "https://cdnjs.cloudflare.com/ajax/libs/platform/1.3.5/platform.js"
 //# Preload "../../../../js/lib/node-enum.js"
 //# Preload "../../../../js/platform-detect.js"

@@ -110,7 +110,7 @@ export function latest_release(slug, callback) {
 /// Returns: `boolean`, representing whether the requests were made.
 export function find_logo(slug, commitish, callback) {
 	if(callback && commitish && slug && slug.name && slug.repo) {
-		let url_base = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}`;
+		let url_base = `//rawcdn.githack.com/${slug.name}/${slug.repo}/${commitish}`;
 
 		let logo_options  = cartesian(LOGO_SEARCH_PATHS, LOGO_SEARCH_NAMES, LOGO_EXTENSIONS);
 		let requests_left = logo_options.length;
@@ -163,7 +163,7 @@ export function find_logo(slug, commitish, callback) {
 /// Returns: `boolean`, representing whether the request was made.
 export function get_config(slug, commitish, callback) {
 	if(callback && commitish && slug && slug.name && slug.repo) {
-		let url     = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}/release-front.json`;
+		let url     = `//rawcdn.githack.com/${slug.name}/${slug.repo}/${commitish}/release-front.json`;
     let request = new XMLHttpRequest();
 		request.open("GET", url);
 		// Using User-Agent from browsers doesn't work apparently :v
@@ -178,7 +178,7 @@ export function get_config(slug, commitish, callback) {
 						let logo_url = response.logo || response.logo_url;
 						if(typeof logo_url === "string" && logo_url.length !== 0) {
 							if(logo_url.indexOf("//") === -1)
-								logo_url = `//cdn.rawgit.com/${slug.name}/${slug.repo}/${commitish}/${logo_url}`;
+								logo_url = `//rawcdn.githack.com/${slug.name}/${slug.repo}/${commitish}/${logo_url}`;
 						} else
 							logo_url = null;
 

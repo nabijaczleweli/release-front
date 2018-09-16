@@ -8,7 +8,7 @@ A generic front-end to the GitHub releases system, akin to [the Patchwork one](h
 ### Quickstart
 
 If you just want to check it out, see [this live version](https://releases.nabijaczleweli.xyz), always up-to-date with `master`.
-Alternatively, use Rawgit to see any older version under `https://cdn.rawgit.com/nabijaczleweli/release-front/<COMMIT HASH>/index.html`.
+Alternatively, use GitHack to see any older version under `https://rawcdn.githack.com/nabijaczleweli/release-front/<COMMIT HASH>/index.html`.
 
 To display a release for a specific repo query the repo slug in the form of `?owner/repo` or put the slug/GitHub URL to somewhere within the repo in the input box.
 

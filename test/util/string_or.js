@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 
-//# Preload-remote "https://cdn.rawgit.com/es-shims/get-own-property-symbols/master/build/get-own-property-symbols.max.js"
+//# Preload-remote "https://rawcdn.githack.com/es-shims/get-own-property-symbols/master/build/get-own-property-symbols.max.js"
 //# Preload "../../../js/util.js"
 //# Preload "../framework.js"
 
